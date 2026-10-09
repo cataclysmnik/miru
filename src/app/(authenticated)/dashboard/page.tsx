@@ -83,7 +83,14 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {isTeacher ? <TeacherDashboardView teacherId={identifierText} /> : <StudentDashboardView studentId={identifierText} />}
+      {isTeacher ? (
+        <TeacherDashboardView teacherId={identifierText} teacherName={userProfile?.name} />
+      ) : (
+        <StudentDashboardView 
+          studentId={identifierText} 
+          studentEmail={userProfile?.email || user?.email} 
+        />
+      )}
     </div>
   );
 }
@@ -91,7 +98,7 @@ export default function DashboardPage() {
 /* =========================================================================
    TEACHER DASHBOARD VIEW (LIVE DATABASE METRICS)
    ========================================================================= */
-function TeacherDashboardView({ teacherId }: { teacherId: string }) {
+function TeacherDashboardView({ teacherId, teacherName }: { teacherId: string; teacherName?: string }) {
   const [metrics, setMetrics] = useState({
     totalStudentsCount: 0,
     activeCoursesCount: 0,
@@ -101,15 +108,21 @@ function TeacherDashboardView({ teacherId }: { teacherId: string }) {
   });
 
   const loadMetrics = () => {
-    setMetrics(DataService.getTeacherMetrics(teacherId));
+    setMetrics(DataService.getTeacherMetrics(teacherId, teacherName));
   };
 
   useEffect(() => {
     loadMetrics();
-  }, []);
+  }, [teacherId, teacherName]);
 
   const handleQuickGrade = (subId: string) => {
-    DataService.gradeSubmission(subId, 95, "Well articulated solution meeting all requirements.");
+    DataService.gradeSubmission(
+      subId, 
+      95, 
+      "Well articulated solution meeting all requirements.",
+      teacherId,
+      teacherName
+    );
     loadMetrics();
   };
 
@@ -277,18 +290,19 @@ function TeacherDashboardView({ teacherId }: { teacherId: string }) {
 /* =========================================================================
    STUDENT DASHBOARD VIEW (LIVE DATABASE METRICS)
    ========================================================================= */
-function StudentDashboardView({ studentId }: { studentId: string }) {
+function StudentDashboardView({ studentId, studentEmail }: { studentId: string; studentEmail?: string }) {
   const [metrics, setMetrics] = useState({
     enrolledCount: 0,
     completedAssignments: 0,
     pendingCount: 0,
     averageGrade: 92,
     enrolledCourses: [] as CourseData[],
+    enrolledAssignments: [] as any[],
   });
 
   useEffect(() => {
-    setMetrics(DataService.getStudentMetrics(studentId));
-  }, [studentId]);
+    setMetrics(DataService.getStudentMetrics(studentId, studentEmail));
+  }, [studentId, studentEmail]);
 
   return (
     <div className="flex flex-col xl:flex-row gap-8">
@@ -366,32 +380,47 @@ function StudentDashboardView({ studentId }: { studentId: string }) {
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            {metrics.enrolledCourses.map((course) => (
-              <div key={course.id} className="bg-card text-card-foreground p-6 rounded-2xl relative overflow-hidden group border border-border hover:border-primary/40 transition-colors">
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-xs font-mono font-bold text-primary bg-primary/10 px-2 py-0.5 rounded">
-                    {course.courseCode}
-                  </span>
-                  <span className="text-xs text-muted-foreground">
-                    {course.enrolledStudents.length} classmates
-                  </span>
+          {metrics.enrolledCourses.length === 0 ? (
+            <Card className="rounded-2xl border border-dashed border-border/80 p-8 text-center bg-card/50">
+              <Book className="w-8 h-8 text-primary mx-auto mb-2 opacity-60" />
+              <h4 className="font-serif font-bold text-base text-foreground mb-1">No Enrolled Courses</h4>
+              <p className="text-xs text-muted-foreground max-w-sm mx-auto mb-4 leading-relaxed">
+                You are not currently enrolled in any courses for Fall Semester 2026. Explore the course catalog to enroll and access study materials.
+              </p>
+              <Link href="/courses">
+                <Button size="sm" className="bg-primary hover:bg-primary/90 text-primary-foreground text-xs rounded-xl shadow-xs">
+                  Browse Course Catalog →
+                </Button>
+              </Link>
+            </Card>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              {metrics.enrolledCourses.map((course) => (
+                <div key={course.id} className="bg-card text-card-foreground p-6 rounded-2xl relative overflow-hidden group border border-border hover:border-primary/40 transition-colors">
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-xs font-mono font-bold text-primary bg-primary/10 px-2 py-0.5 rounded">
+                      {course.courseCode}
+                    </span>
+                    <span className="text-xs text-muted-foreground">
+                      {course.enrolledStudents.length} classmates
+                    </span>
+                  </div>
+                  <h3 className="text-lg font-bold mb-2">{course.title}</h3>
+                  <p className="text-xs text-muted-foreground mb-6 line-clamp-2">
+                    {course.description}
+                  </p>
+                  <div className="flex items-center justify-between mt-auto pt-4 border-t border-border">
+                    <span className="text-xs text-muted-foreground">{course.teacherName}</span>
+                    <Link href={`/courses/${course.id}`}>
+                      <Button size="sm" className="bg-primary hover:bg-primary/90 text-primary-foreground text-xs rounded-xl">
+                        Course Hub →
+                      </Button>
+                    </Link>
+                  </div>
                 </div>
-                <h3 className="text-lg font-bold mb-2">{course.title}</h3>
-                <p className="text-xs text-muted-foreground mb-6 line-clamp-2">
-                  {course.description}
-                </p>
-                <div className="flex items-center justify-between mt-auto pt-4 border-t border-border">
-                  <span className="text-xs text-muted-foreground">{course.teacherName}</span>
-                  <Link href={`/courses/${course.id}`}>
-                    <Button size="sm" className="bg-primary hover:bg-primary/90 text-primary-foreground text-xs rounded-xl">
-                      Course Hub →
-                    </Button>
-                  </Link>
-                </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 

@@ -40,5 +40,12 @@
     "role": "STUDENT",
     "idNumber": "24BRS1242",
     "idLabel": "Register No."
+  },
+  "98765@miru.edu": {
+    "email": "98765@miru.edu",
+    "name": "Prof. Sarah Lee",
+    "role": "TEACHER",
+    "idNumber": "98765",
+    "idLabel": "Employee ID"
   }
 }

@@ -6,6 +6,8 @@ import { Input } from "@/components/ui/input";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { useAuthRole } from "@/context/RoleAuthContext";
 
+import { Suspense } from "react";
+
 export default function DashboardLayout({
   children,
 }: {
@@ -22,7 +24,9 @@ export default function DashboardLayout({
 
   return (
     <div className="flex h-screen bg-background overflow-hidden text-foreground">
-      <Sidebar />
+      <Suspense fallback={<aside className="w-64 bg-card border-r border-border hidden md:flex flex-col min-h-screen" />}>
+        <Sidebar />
+      </Suspense>
       <div className="flex-1 flex flex-col overflow-hidden">
         <header className="h-20 bg-card border-b border-border flex items-center justify-between px-6 lg:px-8 z-10">
           <div className="flex-1 max-w-lg relative">

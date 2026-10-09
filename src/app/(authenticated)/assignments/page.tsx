@@ -13,7 +13,12 @@ import {
   X,
   Lock,
   Award,
-  ArrowRight
+  ArrowRight,
+  BookOpen,
+  Paperclip,
+  Download,
+  Loader2,
+  Check
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useAuthRole } from "@/context/RoleAuthContext";
@@ -29,6 +34,7 @@ export default function AssignmentsPage() {
   const [courses, setCourses] = useState<CourseData[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
 
+  const studentIdentifier = userProfile?.idNumber || user?.email || "24BRS1242";
   const rawStudentName = userProfile?.name;
   const studentName = (rawStudentName && !rawStudentName.toLowerCase().includes("nikunj"))
     ? rawStudentName
@@ -46,6 +52,9 @@ export default function AssignmentsPage() {
   const [submittingAssignment, setSubmittingAssignment] = useState<AssignmentData | null>(null);
   const [submissionNotes, setSubmissionNotes] = useState("");
   const [uploadedFileName, setUploadedFileName] = useState("");
+  const [uploadedFileUrl, setUploadedFileUrl] = useState("");
+  const [isUploading, setIsUploading] = useState(false);
+  const [downloadToast, setDownloadToast] = useState<string | null>(null);
 
   // Grading Modal (Teacher)
   const [gradingSubmission, setGradingSubmission] = useState<SubmissionData | null>(null);
@@ -65,6 +74,48 @@ export default function AssignmentsPage() {
   useEffect(() => {
     loadData();
   }, []);
+
+  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsUploading(true);
+    setUploadedFileName(file.name);
+
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("category", "submissions");
+
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await res.json();
+      if (data.success) {
+        setUploadedFileUrl(data.fileUrl);
+      }
+    } catch (err) {
+      console.error("Upload error:", err);
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const triggerDownload = (fileName: string, fileUrl?: string) => {
+    if (fileUrl) {
+      const link = document.createElement("a");
+      link.href = fileUrl;
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+    setDownloadToast(`Opening file: ${fileName}`);
+    setTimeout(() => {
+      setDownloadToast(null);
+    }, 3500);
+  };
 
   const handleCreateAssignment = (e: React.FormEvent) => {
     e.preventDefault();
@@ -97,6 +148,7 @@ export default function AssignmentsPage() {
       studentId: studentIdentifier,
       studentName,
       fileName: uploadedFileName || "deliverable_solution.zip",
+      fileUrl: uploadedFileUrl || undefined,
       notes: submissionNotes,
     });
 
@@ -104,29 +156,82 @@ export default function AssignmentsPage() {
     setSubmittingAssignment(null);
     setSubmissionNotes("");
     setUploadedFileName("");
+    setUploadedFileUrl("");
   };
 
   const handleSaveGrade = (e: React.FormEvent) => {
     e.preventDefault();
     if (!gradingSubmission) return;
 
+    // Verify course ownership
+    const assign = assignments.find((a) => a.id === gradingSubmission.assignmentId);
+    const crs = courses.find((c) => c.id === assign?.courseId || c.courseCode === assign?.courseCode);
+    const isOwner = isTeacher && crs && (
+      crs.teacherId?.toLowerCase() === teacherIdentifier.toLowerCase() ||
+      (teacherIdentifier === "58291" && crs.teacherId === "faculty-1") ||
+      (userProfile?.name && crs.teacherName && userProfile.name.toLowerCase() === crs.teacherName.toLowerCase())
+    );
+
+    if (!isOwner) {
+      alert("Unauthorized: You can only grade submissions for courses you teach.");
+      return;
+    }
+
     DataService.gradeSubmission(
       gradingSubmission.id,
       gradeInput,
-      feedbackInput || "Well organized submission meeting all specifications."
+      feedbackInput || "Well organized submission meeting all specifications.",
+      teacherIdentifier,
+      userProfile?.name
     );
 
     loadData();
     setGradingSubmission(null);
   };
 
-  const filteredAssignments = assignments.filter((a) =>
+  const teacherIdentifier = userProfile?.idNumber || "58291";
+
+  // Enrolled courses for current student
+  const enrolledCourses = courses.filter((c) =>
+    c.enrolledStudents.some((id) =>
+      id.toLowerCase() === studentIdentifier.toLowerCase() ||
+      (userProfile?.email && id.toLowerCase() === userProfile.email.toLowerCase())
+    )
+  );
+
+  const enrolledCourseIds = new Set(enrolledCourses.map((c) => c.id));
+  const enrolledCourseCodes = new Set(enrolledCourses.map((c) => c.courseCode.toLowerCase()));
+
+  const [teacherFilter, setTeacherFilter] = useState<"ALL" | "CONTROLLED">("ALL");
+
+  // Students see ONLY assignments for courses they are enrolled in!
+  // Teachers can view all assignments or filter by their controlled courses
+  const visibleAssignments = isTeacher
+    ? (teacherFilter === "ALL"
+        ? assignments
+        : assignments.filter((a) => {
+            const c = courses.find((crs) => crs.id === a.courseId || crs.courseCode === a.courseCode);
+            return c?.teacherId === teacherIdentifier || (teacherIdentifier === "58291" && c?.teacherId === "faculty-1");
+          }))
+    : assignments.filter((a) =>
+        enrolledCourseIds.has(a.courseId) || enrolledCourseCodes.has(a.courseCode.toLowerCase())
+      );
+
+  const filteredAssignments = visibleAssignments.filter((a) =>
     a.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
     a.courseCode.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
-    <div className="flex flex-col gap-6 text-foreground">
+    <div className="flex flex-col gap-6 text-foreground relative">
+      {/* Toast Notification */}
+      {downloadToast && (
+        <div className="fixed bottom-6 right-6 z-50 bg-foreground text-background px-4 py-3 rounded-2xl shadow-lg flex items-center gap-2 text-xs font-medium animate-in slide-in-from-bottom-5">
+          <Check className="w-4 h-4 text-primary" />
+          <span>{downloadToast}</span>
+        </div>
+      )}
+
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-2 border-b border-border/40">
         <div>
@@ -162,17 +267,64 @@ export default function AssignmentsPage() {
         )}
       </div>
 
+      {/* Student Enrolled Courses Banner */}
+      {!isTeacher && (
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-2xl bg-card border border-border/80 shadow-xs">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-primary/15 text-primary flex items-center justify-center flex-shrink-0">
+              <BookOpen className="w-5 h-5" />
+            </div>
+            <div>
+              <p className="text-xs font-semibold text-foreground">
+                Enrolled Curriculum • {enrolledCourses.length} {enrolledCourses.length === 1 ? "Course" : "Courses"}
+              </p>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                {enrolledCourses.length > 0
+                  ? `Showing assignments for: ${enrolledCourses.map((c) => `${c.courseCode} (${c.title})`).join(", ")}`
+                  : "You are not enrolled in any courses for Fall 2026."}
+              </p>
+            </div>
+          </div>
+          <Link href="/courses">
+            <Button variant="outline" size="sm" className="rounded-xl text-xs flex items-center gap-1.5 h-8">
+              Manage Enrolled Courses →
+            </Button>
+          </Link>
+        </div>
+      )}
+
       {/* Filter and Search Bar */}
-      <div className="flex items-center gap-4 bg-card p-4 rounded-2xl border border-border shadow-sm">
+      <div className="flex flex-col sm:flex-row sm:items-center gap-3 bg-card p-4 rounded-2xl border border-border shadow-xs">
         <div className="relative flex-1">
           <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
           <Input 
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="pl-10 bg-muted/60 border border-border/40 rounded-xl placeholder:text-muted-foreground focus-visible:ring-primary text-sm" 
-            placeholder="Search assignments by title or course code..." 
+            placeholder={isTeacher ? "Search all assignments by title or course..." : "Search assignments in your enrolled courses..."} 
           />
         </div>
+
+        {isTeacher && (
+          <div className="flex items-center gap-2">
+            <Button
+              variant={teacherFilter === "ALL" ? "default" : "outline"}
+              size="sm"
+              className="rounded-xl text-xs h-10 px-3.5 font-medium"
+              onClick={() => setTeacherFilter("ALL")}
+            >
+              All Assignments ({assignments.length})
+            </Button>
+            <Button
+              variant={teacherFilter === "CONTROLLED" ? "default" : "outline"}
+              size="sm"
+              className="rounded-xl text-xs h-10 px-3.5 font-medium"
+              onClick={() => setTeacherFilter("CONTROLLED")}
+            >
+              Your Courses
+            </Button>
+          </div>
+        )}
       </div>
 
       {/* Assignments List */}
@@ -187,6 +339,11 @@ export default function AssignmentsPage() {
           const assignmentSubs = submissions.filter((s) => s.assignmentId === assignment.id);
           const pendingGradingSub = assignmentSubs.find((s) => s.status === "SUBMITTED");
           const targetCourse = courses.find((c) => c.courseCode === assignment.courseCode || c.id === assignment.courseId);
+          const isMyCourse = isTeacher && targetCourse && (
+            targetCourse.teacherId?.toLowerCase() === teacherIdentifier.toLowerCase() ||
+            (teacherIdentifier === "58291" && targetCourse.teacherId === "faculty-1") ||
+            (Boolean(userProfile?.name) && Boolean(targetCourse.teacherName) && userProfile!.name.toLowerCase() === targetCourse.teacherName.toLowerCase())
+          );
 
           return (
             <Card key={assignment.id} className="rounded-2xl border border-border shadow-sm hover:shadow-md transition-all bg-card overflow-hidden">
@@ -247,25 +404,32 @@ export default function AssignmentsPage() {
                   {isTeacher ? (
                     /* Teacher Controls */
                     <div className="flex items-center gap-3">
-                      {pendingGradingSub ? (
-                        <Button 
-                          size="sm"
-                          onClick={() => {
-                            setGradingSubmission(pendingGradingSub);
-                            setGradeInput(90);
-                            setFeedbackInput("");
-                          }}
-                          className="bg-primary hover:bg-primary/90 text-primary-foreground text-xs rounded-xl shadow-xs"
-                        >
-                          Grade ({pendingGradingSub.studentName})
-                        </Button>
-                      ) : assignmentSubs.length > 0 ? (
-                        <span className="inline-flex items-center gap-1.5 text-xs font-medium text-primary bg-primary/10 px-3 py-1.5 rounded-xl">
-                          <CheckCircle2 className="w-3.5 h-3.5" />
-                          All Graded
-                        </span>
+                      {isMyCourse ? (
+                        pendingGradingSub ? (
+                          <Button 
+                            size="sm"
+                            onClick={() => {
+                              setGradingSubmission(pendingGradingSub);
+                              setGradeInput(90);
+                              setFeedbackInput("");
+                            }}
+                            className="bg-primary hover:bg-primary/90 text-primary-foreground text-xs rounded-xl shadow-xs"
+                          >
+                            Grade ({pendingGradingSub.studentName})
+                          </Button>
+                        ) : assignmentSubs.length > 0 ? (
+                          <span className="inline-flex items-center gap-1.5 text-xs font-medium text-primary bg-primary/10 px-3 py-1.5 rounded-xl">
+                            <CheckCircle2 className="w-3.5 h-3.5" />
+                            All Graded
+                          </span>
+                        ) : (
+                          <span className="text-xs text-muted-foreground">No submissions yet</span>
+                        )
                       ) : (
-                        <span className="text-xs text-muted-foreground">No submissions yet</span>
+                        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-muted/60 text-xs text-muted-foreground border border-border/40">
+                          <Lock className="w-3.5 h-3.5" />
+                          <span>Taught by {targetCourse?.teacherName || "Other Faculty"}</span>
+                        </div>
                       )}
                     </div>
                   ) : (
@@ -283,17 +447,41 @@ export default function AssignmentsPage() {
                       )}
 
                       {studentSub?.status === 'SUBMITTED' && (
-                        <span className="inline-flex items-center gap-1 text-xs font-medium bg-secondary text-secondary-foreground px-3 py-1.5 rounded-xl border border-primary/20">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-primary" />
-                          Submitted (Awaiting Grade)
-                        </span>
+                        <div className="flex flex-col items-end gap-1.5">
+                          <span className="inline-flex items-center gap-1 text-xs font-medium bg-secondary text-secondary-foreground px-3 py-1.5 rounded-xl border border-primary/20">
+                            <CheckCircle2 className="w-3.5 h-3.5 text-primary" />
+                            Submitted (Awaiting Grade)
+                          </span>
+                          {studentSub.fileName && (
+                            <button
+                              onClick={() => triggerDownload(studentSub.fileName, studentSub.fileUrl)}
+                              className="text-[11px] text-primary hover:underline flex items-center gap-1 max-w-[150px] truncate"
+                              title={studentSub.fileName}
+                            >
+                              <Paperclip className="w-3 h-3 flex-shrink-0" />
+                              <span className="truncate">{studentSub.fileName}</span>
+                            </button>
+                          )}
+                        </div>
                       )}
 
                       {studentSub?.status === 'GRADED' && (
-                        <span className="inline-flex items-center gap-1 text-xs font-bold bg-primary/15 text-primary px-3 py-1.5 rounded-xl border border-primary/30">
-                          <Award className="w-3.5 h-3.5" />
-                          {studentSub.grade} / {assignment.maxMarks}
-                        </span>
+                        <div className="flex flex-col items-end gap-1.5">
+                          <span className="inline-flex items-center gap-1 text-xs font-bold bg-primary/15 text-primary px-3 py-1.5 rounded-xl border border-primary/30">
+                            <Award className="w-3.5 h-3.5" />
+                            {studentSub.grade} / {assignment.maxMarks}
+                          </span>
+                          {studentSub.fileName && (
+                            <button
+                              onClick={() => triggerDownload(studentSub.fileName, studentSub.fileUrl)}
+                              className="text-[11px] text-muted-foreground hover:text-foreground flex items-center gap-1 max-w-[150px] truncate"
+                              title={studentSub.fileName}
+                            >
+                              <Paperclip className="w-3 h-3 flex-shrink-0" />
+                              <span className="truncate">{studentSub.fileName}</span>
+                            </button>
+                          )}
+                        </div>
                       )}
                     </div>
                   )}
@@ -302,6 +490,33 @@ export default function AssignmentsPage() {
             </Card>
           );
         })}
+
+        {filteredAssignments.length === 0 && (
+          <Card className="rounded-2xl border border-dashed border-border/80 p-10 text-center bg-card/40">
+            <div className="w-12 h-12 rounded-2xl bg-muted/60 text-muted-foreground flex items-center justify-center mx-auto mb-3">
+              <FileText className="w-6 h-6 opacity-60" />
+            </div>
+            <h3 className="font-serif font-bold text-lg text-foreground mb-1">
+              {!isTeacher && enrolledCourses.length === 0 
+                ? "No Enrolled Courses Found" 
+                : "No Assignments Found"}
+            </h3>
+            <p className="text-xs text-muted-foreground max-w-md mx-auto mb-5 leading-relaxed">
+              {!isTeacher && enrolledCourses.length === 0
+                ? "You are not enrolled in any courses yet for Fall Semester 2026. Browse the Course Directory to enroll and view assignment prompts."
+                : searchTerm
+                ? `No assignments match "${searchTerm}" in your active courses.`
+                : "There are currently no assignments posted for your enrolled courses."}
+            </p>
+            {!isTeacher && (
+              <Link href="/courses">
+                <Button className="rounded-xl text-xs bg-primary hover:bg-primary/90 text-primary-foreground shadow-xs">
+                  Browse Course Directory →
+                </Button>
+              </Link>
+            )}
+          </Card>
+        )}
       </div>
 
       {/* TEACHER MODAL: Create Assignment */}
@@ -428,24 +643,34 @@ export default function AssignmentsPage() {
             <form onSubmit={handleSubmitWork} className="space-y-4">
               <div>
                 <label className="text-xs font-semibold text-foreground uppercase tracking-wider block mb-1.5">
-                  Attach Deliverable File
+                  Upload Deliverable File
                 </label>
-                <div className="border-2 border-dashed border-border rounded-xl p-6 text-center hover:border-primary/50 transition-colors bg-muted/30">
-                  <UploadCloud className="w-8 h-8 text-primary mx-auto mb-2" />
-                  <p className="text-xs text-foreground font-medium">Click to select file</p>
-                  <p className="text-[11px] text-muted-foreground mt-1">Accepts .zip, .pdf, .ts files</p>
-                  {uploadedFileName ? (
-                    <p className="text-xs text-primary font-bold mt-2">Selected: {uploadedFileName}</p>
-                  ) : (
-                    <button
-                      type="button"
-                      onClick={() => setUploadedFileName("project_solution_final.zip")}
-                      className="mt-2 text-xs text-primary underline"
-                    >
-                      Attach project_solution_final.zip
-                    </button>
-                  )}
-                </div>
+                <label className="border-2 border-dashed border-border rounded-xl p-5 text-center hover:border-primary/50 transition-colors bg-muted/30 cursor-pointer block">
+                  <input
+                    type="file"
+                    className="hidden"
+                    accept=".zip,.pdf,.ts,.tsx,.js,.py,.docx,.txt"
+                    onChange={handleFileSelect}
+                  />
+                  <div className="flex flex-col items-center">
+                    {isUploading ? (
+                      <Loader2 className="w-7 h-7 text-primary animate-spin mb-1.5" />
+                    ) : (
+                      <UploadCloud className="w-7 h-7 text-primary mb-1.5" />
+                    )}
+                    <span className="text-xs text-foreground font-medium">
+                      {isUploading ? "Uploading deliverable..." : "Click or browse to choose deliverable file"}
+                    </span>
+                    <span className="text-[11px] text-muted-foreground mt-0.5">
+                      Accepts .zip, .pdf, .ts, .py, .docx
+                    </span>
+                    {uploadedFileName && (
+                      <span className="text-xs text-primary font-bold mt-2 flex items-center gap-1">
+                        <Check className="w-3.5 h-3.5" /> {uploadedFileName}
+                      </span>
+                    )}
+                  </div>
+                </label>
               </div>
 
               <div>
@@ -465,8 +690,12 @@ export default function AssignmentsPage() {
                 <Button type="button" variant="outline" onClick={() => setSubmittingAssignment(null)} className="flex-1 rounded-xl">
                   Cancel
                 </Button>
-                <Button type="submit" className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl">
-                  Turn In to Database
+                <Button 
+                  type="submit" 
+                  disabled={isUploading}
+                  className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl"
+                >
+                  {isUploading ? "Uploading..." : "Turn In Deliverable"}
                 </Button>
               </div>
             </form>
@@ -489,9 +718,42 @@ export default function AssignmentsPage() {
               <Award className="w-5 h-5 text-primary" />
               <h2 className="text-xl font-bold font-serif">Grade Student Submission</h2>
             </div>
-            <p className="text-xs text-muted-foreground mb-4">
+            <p className="text-xs text-muted-foreground mb-3">
               Student: <strong className="text-foreground">{gradingSubmission.studentName}</strong> ({gradingSubmission.studentId})
             </p>
+
+            {/* Deliverable File Inspection */}
+            <div className="mb-4 p-3 rounded-xl bg-muted/40 border border-border/80 flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2 min-w-0">
+                <div className="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center flex-shrink-0">
+                  <Paperclip className="w-4 h-4" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-xs font-semibold text-foreground truncate">
+                    {gradingSubmission.fileName || "Submitted deliverable"}
+                  </p>
+                  <p className="text-[10px] text-muted-foreground">
+                    Turned in on {gradingSubmission.submissionDate}
+                  </p>
+                </div>
+              </div>
+              <Button
+                type="button"
+                size="sm"
+                variant="outline"
+                onClick={() => triggerDownload(gradingSubmission.fileName, gradingSubmission.fileUrl)}
+                className="text-xs rounded-xl flex items-center gap-1.5 flex-shrink-0"
+              >
+                <Download className="w-3.5 h-3.5" /> Download
+              </Button>
+            </div>
+
+            {gradingSubmission.notes && (
+              <div className="mb-4 p-2.5 rounded-xl bg-muted/20 border border-border/40 text-xs">
+                <span className="font-semibold text-muted-foreground block text-[10px] uppercase tracking-wider mb-0.5">Student Notes</span>
+                <p className="text-foreground italic">"{gradingSubmission.notes}"</p>
+              </div>
+            )}
 
             <form onSubmit={handleSaveGrade} className="space-y-4">
               <div>

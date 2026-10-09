@@ -30,6 +30,7 @@ export interface SubmissionData {
   studentName: string;
   submissionDate: string;
   fileName: string;
+  fileUrl?: string;
   notes?: string;
   status: "SUBMITTED" | "GRADED";
   grade?: number;
@@ -42,6 +43,7 @@ export interface CourseResourceData {
   title: string;
   description: string;
   fileName: string;
+  fileUrl?: string;
   fileType: string; // PDF, Slides, Document, Notes
   fileSize: string;
   uploadedAt: string;
@@ -59,93 +61,233 @@ function getClient() {
   return amplifyClient;
 }
 
-const STORAGE_KEY_COURSES = "miru_data_courses";
-const STORAGE_KEY_ASSIGNMENTS = "miru_data_assignments";
-const STORAGE_KEY_SUBMISSIONS = "miru_data_submissions";
-const STORAGE_KEY_RESOURCES = "miru_data_resources";
+const STORAGE_KEY_COURSES = "miru_data_courses_v3";
+const STORAGE_KEY_ASSIGNMENTS = "miru_data_assignments_v3";
+const STORAGE_KEY_SUBMISSIONS = "miru_data_submissions_v3";
+const STORAGE_KEY_RESOURCES = "miru_data_resources_v3";
 
 const INITIAL_RESOURCES: CourseResourceData[] = [
   {
-    id: "res-1",
-    courseId: "course-1",
-    title: "React 19 & Next.js Core Architecture",
-    description: "Lecture slides covering Server Components, streaming SSR, and client islands.",
-    fileName: "lecture_01_react_nextjs.pdf",
-    fileType: "Lecture Slides",
-    fileSize: "3.8 MB",
+    id: "res-cloud-1",
+    courseId: "course-cloud-arch",
+    title: "AWS Well-Architected Framework: Reliability Pillar",
+    description: "In-depth guide to multi-region disaster recovery, fault isolation, and auto-scaling architectures.",
+    fileName: "well_architected_reliability.pdf",
+    fileType: "Architecture Guide",
+    fileSize: "4.2 MB",
+    uploadedAt: "2026-10-01",
+  },
+  {
+    id: "res-swe-1",
+    courseId: "course-swe",
+    title: "Clean Code & Agile Engineering Handbook",
+    description: "SOLID principles, test-driven development, and microservice boundary decomposition.",
+    fileName: "clean_software_engineering_handbook.pdf",
+    fileType: "Study Guide",
+    fileSize: "3.5 MB",
     uploadedAt: "2026-10-02",
   },
   {
-    id: "res-2",
-    courseId: "course-1",
-    title: "Server Actions & State Management Handbook",
-    description: "Comprehensive guide to mutation patterns without client overhead.",
-    fileName: "server_actions_handbook.pdf",
-    fileType: "Study Guide",
-    fileSize: "2.1 MB",
-    uploadedAt: "2026-10-04",
-  },
-  {
-    id: "res-3",
-    courseId: "course-2",
-    title: "AWS DynamoDB Single Table Modeling Architecture",
-    description: "Deep dive into composite partition keys, secondary indexes, and query patterns.",
-    fileName: "dynamodb_single_table_patterns.pdf",
-    fileType: "Architecture Guide",
-    fileSize: "4.5 MB",
+    id: "res-robot-1",
+    courseId: "course-robot-prog",
+    title: "ROS2 Galactic Robotics Systems Architecture",
+    description: "Robotics middleware, URDF modeling, Gazebo physics simulation, and transform trees.",
+    fileName: "ros2_robot_programming_guide.pdf",
+    fileType: "Lecture Slides",
+    fileSize: "5.1 MB",
     uploadedAt: "2026-10-03",
   },
   {
-    id: "res-4",
-    courseId: "course-2",
-    title: "AWS AppSync & GraphQL Resolvers Blueprint",
-    description: "Official guide to pipeline resolvers, subscriptions, and Cognito auth modes.",
-    fileName: "appsync_resolvers_blueprint.pdf",
-    fileType: "Lecture Slides",
-    fileSize: "2.7 MB",
-    uploadedAt: "2026-10-05",
+    id: "res-ai-1",
+    courseId: "course-ai",
+    title: "Modern Artificial Intelligence Foundations",
+    description: "Comprehensive syllabus on state-space search, Bayesian inference, and neural networks.",
+    fileName: "ai_foundations_notes.pdf",
+    fileType: "Lecture Notes",
+    fileSize: "6.8 MB",
+    uploadedAt: "2026-10-02",
   },
   {
-    id: "res-5",
-    courseId: "course-3",
-    title: "Wabi-Sabi Aesthetics in Modern Digital Interfaces",
-    description: "Japanese design philosophy: honoring asymmetry, earthy matcha palettes, and calm typography.",
-    fileName: "wabi_sabi_ui_philosophy.pdf",
-    fileType: "Design Document",
-    fileSize: "5.2 MB",
+    id: "res-drones-1",
+    courseId: "course-autonomous-drones",
+    title: "Autonomous UAV Flight Dynamics & Control",
+    description: "State estimation, Kalman filtering, optical flow sensors, and trajectory generation.",
+    fileName: "uav_flight_dynamics_notes.pdf",
+    fileType: "Lecture Notes",
+    fileSize: "4.6 MB",
+    uploadedAt: "2026-10-04",
+  },
+  {
+    id: "res-daa-1",
+    courseId: "course-daa",
+    title: "Algorithm Design Paradigms & Complexity Cheatsheet",
+    description: "Proof templates for greedy choice properties and dynamic programming state transitions.",
+    fileName: "daa_paradigms_cheatsheet.pdf",
+    fileType: "Study Guide",
+    fileSize: "2.8 MB",
+    uploadedAt: "2026-10-03",
+  },
+  {
+    id: "res-dsa-1",
+    courseId: "course-dsa",
+    title: "Advanced Data Structures Reference Manual",
+    description: "B-Trees, Trie indices, Disjoint Set Union, and Fibonacci Heap operations with proofs.",
+    fileName: "dsa_advanced_reference.pdf",
+    fileType: "Study Guide",
+    fileSize: "3.9 MB",
     uploadedAt: "2026-10-01",
+  },
+  {
+    id: "res-physics-1",
+    courseId: "course-eng-physics",
+    title: "Engineering Physics: Quantum & Wave Optics",
+    description: "Schrödinger wave equations, laser cavity resonators, and fiber optic attenuation physics.",
+    fileName: "engineering_physics_vol1.pdf",
+    fileType: "Lecture Slides",
+    fileSize: "5.4 MB",
+    uploadedAt: "2026-10-01",
+  },
+  {
+    id: "res-chem-1",
+    courseId: "course-eng-chemistry",
+    title: "Engineering Chemistry: Electrochemistry & Materials",
+    description: "Battery cells, corrosion mitigation, polymer composites, and green fuel cell chemistry.",
+    fileName: "engineering_chemistry_notes.pdf",
+    fileType: "Lecture Notes",
+    fileSize: "4.1 MB",
+    uploadedAt: "2026-10-02",
+  },
+  {
+    id: "res-cvla-1",
+    courseId: "course-cvla",
+    title: "Linear Algebra & Complex Analysis Comprehensive Guide",
+    description: "Orthogonal projections, Cauchy-Riemann equations, residue calculus, and Fourier transforms.",
+    fileName: "cvla_mathematical_foundations.pdf",
+    fileType: "Study Guide",
+    fileSize: "4.9 MB",
+    uploadedAt: "2026-10-03",
+  },
+  {
+    id: "res-discrete-1",
+    courseId: "course-discrete-math",
+    title: "Discrete Mathematical Structures & Proof Systems",
+    description: "Boolean algebra, graph traversal theorems, combinatorial counting, and pigeonhole applications.",
+    fileName: "discrete_math_proofs.pdf",
+    fileType: "Lecture Notes",
+    fileSize: "3.3 MB",
+    uploadedAt: "2026-10-02",
   },
 ];
 
 // Default starter dataset
 const INITIAL_COURSES: CourseData[] = [
   {
-    id: "course-1",
-    title: "Introduction to React & Next.js",
-    courseCode: "CS101",
-    description: "Component architecture, state management, and modern React 19 paradigms.",
+    id: "course-cloud-arch",
+    title: "Cloud Architecture Design",
+    courseCode: "CSE4001",
+    description: "Design resilient, scalable, distributed multi-cloud and serverless architectures with automated infrastructure.",
     teacherId: "58291",
     teacherName: "Prof. Kenneth Mori",
     isPublished: true,
-    enrolledStudents: ["24BRS1242", "24BRS1004", "24BRS1089"],
+    enrolledStudents: ["24BRS1242", "sagniksinghaishere@gmail.com", "24BRS1004"],
   },
   {
-    id: "course-2",
-    title: "Advanced AWS Cloud Architecture",
-    courseCode: "CS405",
-    description: "Serverless systems, DynamoDB multi-table modeling, and AppSync GraphQL.",
-    teacherId: "58291",
-    teacherName: "Prof. Kenneth Mori",
-    isPublished: true,
-    enrolledStudents: ["24BRS1242", "24BRS1120"],
-  },
-  {
-    id: "course-3",
-    title: "UX/UI Design Principles & Wabi-Sabi",
-    courseCode: "DS200",
-    description: "Japanese aesthetic philosophy applied to human-centered digital experiences.",
+    id: "course-swe",
+    title: "Software Engineering",
+    courseCode: "CSE3001",
+    description: "Software development lifecycles, agile ceremonies, design patterns, microservices, and CI/CD pipelines.",
     teacherId: "98765",
     teacherName: "Prof. Sarah Lee",
+    isPublished: true,
+    enrolledStudents: ["24BRS1242", "sagniksinghaishere@gmail.com", "24BRS1120"],
+  },
+  {
+    id: "course-robot-prog",
+    title: "Robot Programming",
+    courseCode: "ROB3002",
+    description: "Kinematics, ROS2 frameworks, motion planning, actuator control, and real-time robotic systems programming.",
+    teacherId: "58291",
+    teacherName: "Prof. Kenneth Mori",
+    isPublished: true,
+    enrolledStudents: ["24BRS1055"],
+  },
+  {
+    id: "course-ai",
+    title: "Artificial Intelligence",
+    courseCode: "CSE3002",
+    description: "Heuristic search, probabilistic graphical models, reinforcement learning, and deep neural network representations.",
+    teacherId: "98765",
+    teacherName: "Prof. Sarah Lee",
+    isPublished: true,
+    enrolledStudents: ["24BRS1004", "24BRS1089"],
+  },
+  {
+    id: "course-autonomous-drones",
+    title: "Autonomous Drones",
+    courseCode: "AER4003",
+    description: "UAV aerodynamics, computer vision for obstacle avoidance, sensor fusion (IMU/GPS/LiDAR), and autonomous navigation.",
+    teacherId: "58291",
+    teacherName: "Prof. Kenneth Mori",
+    isPublished: true,
+    enrolledStudents: ["24BRS1089", "24BRS1120"],
+  },
+  {
+    id: "course-daa",
+    title: "Design and Analysis of Algorithms",
+    courseCode: "CSE2002",
+    description: "Divide and conquer, greedy strategies, dynamic programming, network flow, NP-completeness, and asymptotic analysis.",
+    teacherId: "98765",
+    teacherName: "Prof. Sarah Lee",
+    isPublished: true,
+    enrolledStudents: ["24BRS1120", "24BRS1055"],
+  },
+  {
+    id: "course-dsa",
+    title: "Data Structures and Algorithms",
+    courseCode: "CSE2001",
+    description: "Linear and hierarchical data structures: balanced search trees, heaps, hash maps, graphs, and amortized complexity.",
+    teacherId: "58291",
+    teacherName: "Prof. Kenneth Mori",
+    isPublished: true,
+    enrolledStudents: ["24BRS1242", "sagniksinghaishere@gmail.com", "24BRS1004"],
+  },
+  {
+    id: "course-eng-physics",
+    title: "Engineering Physics",
+    courseCode: "PHY1001",
+    description: "Electromagnetic theory, quantum wave equations, optics, laser physics, and solid-state materials science.",
+    teacherId: "98765",
+    teacherName: "Prof. Sarah Lee",
+    isPublished: true,
+    enrolledStudents: ["24BRS1089"],
+  },
+  {
+    id: "course-eng-chemistry",
+    title: "Engineering Chemistry",
+    courseCode: "CHY1001",
+    description: "Thermodynamics, electrochemical energy storage, molecular spectroscopy, corrosion engineering, and polymers.",
+    teacherId: "58291",
+    teacherName: "Prof. Kenneth Mori",
+    isPublished: true,
+    enrolledStudents: ["24BRS1120"],
+  },
+  {
+    id: "course-cvla",
+    title: "Complex Variables and Linear Algebra",
+    courseCode: "MAT2001",
+    description: "Vector spaces, eigenvalues and eigenvectors, singular value decomposition, conformal mapping, and contour integration.",
+    teacherId: "98765",
+    teacherName: "Prof. Sarah Lee",
+    isPublished: true,
+    enrolledStudents: ["24BRS1004"],
+  },
+  {
+    id: "course-discrete-math",
+    title: "Discrete Mathematics",
+    courseCode: "MAT1002",
+    description: "Propositional and predicate logic, set theory, combinatorics, recurrence relations, and graph theory proofs.",
+    teacherId: "58291",
+    teacherName: "Prof. Kenneth Mori",
     isPublished: true,
     enrolledStudents: ["24BRS1055"],
   },
@@ -153,32 +295,112 @@ const INITIAL_COURSES: CourseData[] = [
 
 const INITIAL_ASSIGNMENTS: AssignmentData[] = [
   {
-    id: "assign-1",
-    courseId: "course-1",
-    courseCode: "CS101",
-    title: "React Component Library Architecture",
-    instructions: "Implement 5 reusable UI components using Tailwind CSS and accessible patterns.",
+    id: "assign-cloud-1",
+    courseId: "course-cloud-arch",
+    courseCode: "CSE4001",
+    title: "High-Availability Multi-Region VPC Architecture",
+    instructions: "Design a resilient AWS architecture spanning 2 regions with Route 53 latency routing and DynamoDB global tables.",
     dueDate: "2026-10-25",
     maxMarks: 100,
     isPublished: true,
   },
   {
-    id: "assign-2",
-    courseId: "course-2",
-    courseCode: "CS405",
-    title: "AWS DynamoDB Schema Design",
-    instructions: "Produce an entity-relationship diagram and single-table partition key strategy.",
+    id: "assign-swe-1",
+    courseId: "course-swe",
+    courseCode: "CSE3001",
+    title: "Clean Architecture & Domain-Driven Design Spec",
+    instructions: "Draft the software architecture document for a modular e-commerce engine using DDD aggregate roots and event sourcing.",
+    dueDate: "2026-10-28",
+    maxMarks: 100,
+    isPublished: true,
+  },
+  {
+    id: "assign-robot-1",
+    courseId: "course-robot-prog",
+    courseCode: "ROB3002",
+    title: "ROS2 Node Kinematic Inverse Solver",
+    instructions: "Implement a 6-DOF robotic arm inverse kinematics solver utilizing Python and ROS2 Humble publishers.",
+    dueDate: "2026-11-04",
+    maxMarks: 100,
+    isPublished: true,
+  },
+  {
+    id: "assign-ai-1",
+    courseId: "course-ai",
+    courseCode: "CSE3002",
+    title: "A* Pathfinding & Minimax Game Theory Agent",
+    instructions: "Build an adversarial search agent with alpha-beta pruning and an admissible heuristic distance metric.",
     dueDate: "2026-11-02",
+    maxMarks: 100,
+    isPublished: true,
+  },
+  {
+    id: "assign-drones-1",
+    courseId: "course-autonomous-drones",
+    courseCode: "AER4003",
+    title: "Quadcopter PID Flight Controller Simulation",
+    instructions: "Tune roll, pitch, and yaw PID loops for a quadrotor drone under 15 m/s turbulent wind gust vectors.",
+    dueDate: "2026-11-10",
+    maxMarks: 100,
+    isPublished: true,
+  },
+  {
+    id: "assign-daa-1",
+    courseId: "course-daa",
+    courseCode: "CSE2002",
+    title: "Dynamic Programming: Knapsack & Longest Common Subsequence",
+    instructions: "Analyze recurrence relations, prove optimal substructure, and construct space-optimized bottom-up tables.",
+    dueDate: "2026-10-30",
+    maxMarks: 100,
+    isPublished: true,
+  },
+  {
+    id: "assign-dsa-1",
+    courseId: "course-dsa",
+    courseCode: "CSE2001",
+    title: "Self-Balancing Red-Black Tree Implementation",
+    instructions: "Implement left/right tree rotations, recoloring rules, and verify logarithmic height invariants.",
+    dueDate: "2026-10-22",
+    maxMarks: 100,
+    isPublished: true,
+  },
+  {
+    id: "assign-physics-1",
+    courseId: "course-eng-physics",
+    courseCode: "PHY1001",
+    title: "Maxwell's Equations & Waveguide Boundary Solutions",
+    instructions: "Derive TE and TM modes for rectangular electromagnetic waveguides with conducting boundary conditions.",
+    dueDate: "2026-11-08",
     maxMarks: 50,
     isPublished: true,
   },
   {
-    id: "assign-3",
-    courseId: "course-3",
-    courseCode: "DS200",
-    title: "Wabi-Sabi UI Prototype",
-    instructions: "Design an e-learning user journey utilizing natural earthy tones and serene typography.",
-    dueDate: "2026-10-18",
+    id: "assign-chemistry-1",
+    courseId: "course-eng-chemistry",
+    courseCode: "CHY1001",
+    title: "Lithium-Ion Battery Electrochemical Kinetics",
+    instructions: "Calculate Nernst potential drifts and electrode degradation curves under cyclic thermal load stress.",
+    dueDate: "2026-11-06",
+    maxMarks: 50,
+    isPublished: true,
+  },
+  {
+    id: "assign-cvla-1",
+    courseId: "course-cvla",
+    courseCode: "MAT2001",
+    title: "Singular Value Decomposition & Image Compression",
+    instructions: "Compute low-rank matrix approximations using SVD and prove orthogonality of singular vector bases.",
+    dueDate: "2026-10-26",
+    maxMarks: 100,
+    isPublished: true,
+  },
+  {
+    id: "assign-discrete-1",
+    courseId: "course-discrete-math",
+    courseCode: "MAT1002",
+    title: "Eulerian & Hamiltonian Graph Characterization Proofs",
+    instructions: "Construct mathematical induction proofs for planar graph four-color theorem corollaries and isomorphism tests.",
+    dueDate: "2026-10-24",
     maxMarks: 100,
     isPublished: true,
   },
@@ -186,33 +408,59 @@ const INITIAL_ASSIGNMENTS: AssignmentData[] = [
 
 const INITIAL_SUBMISSIONS: SubmissionData[] = [
   {
-    id: "sub-1",
-    assignmentId: "assign-3",
+    id: "sub-cloud-1",
+    assignmentId: "assign-cloud-1",
     studentId: "24BRS1242",
     studentName: "Sagnik Singha",
-    submissionDate: "2026-10-06",
-    fileName: "miru_design_system.fig",
-    notes: "Focused on matcha green accents and serene negative space.",
+    submissionDate: "2026-10-09",
+    fileName: "cloud_architecture_vpc_solution.zip",
+    notes: "Includes Terraform IaC scripts and architectural diagram.",
     status: "GRADED",
-    grade: 96,
-    feedback: "Exceptional mastery of wabi-sabi whitespace and typography.",
+    grade: 98,
+    feedback: "Outstanding architectural layout with excellent multi-AZ redundancy and security groups.",
   },
   {
-    id: "sub-2",
-    assignmentId: "assign-1",
-    studentId: "24BRS1004",
-    studentName: "Elena Rostova",
+    id: "sub-dsa-1",
+    assignmentId: "assign-dsa-1",
+    studentId: "24BRS1242",
+    studentName: "Sagnik Singha",
     submissionDate: "2026-10-08",
-    fileName: "components_v1.zip",
-    notes: "Includes full unit test coverage.",
+    fileName: "red_black_tree_src.zip",
+    notes: "Full TypeScript test harness verifying rotation invariants.",
     status: "SUBMITTED",
   },
 ];
 
+let hasInitializedSync = false;
+
 export const DataService = {
+  // ---------------- SERVER DATABASE SYNC ----------------
+  async syncWithServer(): Promise<void> {
+    if (typeof window === "undefined") return;
+    try {
+      const res = await fetch("/api/data");
+      if (res.ok) {
+        const json = await res.json();
+        if (json?.success && json?.data) {
+          const { courses, assignments, submissions, resources } = json.data;
+          if (courses) localStorage.setItem(STORAGE_KEY_COURSES, JSON.stringify(courses));
+          if (assignments) localStorage.setItem(STORAGE_KEY_ASSIGNMENTS, JSON.stringify(assignments));
+          if (submissions) localStorage.setItem(STORAGE_KEY_SUBMISSIONS, JSON.stringify(submissions));
+          if (resources) localStorage.setItem(STORAGE_KEY_RESOURCES, JSON.stringify(resources));
+        }
+      }
+    } catch (err) {
+      console.warn("DataService sync notice:", err);
+    }
+  },
+
   // ---------------- COURSES ----------------
   getCourses(): CourseData[] {
     if (typeof window === "undefined") return INITIAL_COURSES;
+    if (!hasInitializedSync) {
+      hasInitializedSync = true;
+      this.syncWithServer().catch(() => {});
+    }
     try {
       const raw = localStorage.getItem(STORAGE_KEY_COURSES);
       if (!raw) {
@@ -263,6 +511,13 @@ export const DataService = {
       localStorage.setItem(STORAGE_KEY_COURSES, JSON.stringify(updated));
     }
 
+    // Persist to server JSON database
+    fetch("/api/data", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "CREATE_COURSE", course: newCourse }),
+    }).catch((err) => console.warn("Failed to persist course to server:", err));
+
     // Attempt writing to DynamoDB in background
     const client = getClient();
     if (client?.models?.Course) {
@@ -288,10 +543,8 @@ export const DataService = {
     const isAlreadyEnrolled = course.enrolledStudents.includes(studentIdentifier);
 
     if (isAlreadyEnrolled) {
-      // Drop course
       course.enrolledStudents = course.enrolledStudents.filter((id) => id !== studentIdentifier);
     } else {
-      // Enroll
       course.enrolledStudents.push(studentIdentifier);
     }
 
@@ -299,6 +552,13 @@ export const DataService = {
     if (typeof window !== "undefined") {
       localStorage.setItem(STORAGE_KEY_COURSES, JSON.stringify(courses));
     }
+
+    // Persist enrollment to server JSON database
+    fetch("/api/data", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "ENROLL_STUDENT", courseId, studentIdentifier }),
+    }).catch((err) => console.warn("Failed to persist enrollment to server:", err));
 
     // Attempt writing Enrollment to DynamoDB
     const client = getClient();
@@ -341,6 +601,13 @@ export const DataService = {
       localStorage.setItem(STORAGE_KEY_ASSIGNMENTS, JSON.stringify(updated));
     }
 
+    // Persist to server JSON database
+    fetch("/api/data", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "CREATE_ASSIGNMENT", assignment: newAssignment }),
+    }).catch((err) => console.warn("Failed to persist assignment to server:", err));
+
     const client = getClient();
     if (client?.models?.Assignment) {
       client.models.Assignment.create({
@@ -363,6 +630,14 @@ export const DataService = {
     if (typeof window !== "undefined") {
       localStorage.setItem(STORAGE_KEY_ASSIGNMENTS, JSON.stringify(updated));
     }
+
+    // Persist delete to server JSON database
+    fetch("/api/data", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "DELETE_ASSIGNMENT", assignmentId }),
+    }).catch((err) => console.warn("Failed to persist assignment delete to server:", err));
+
     return true;
   },
 
@@ -395,6 +670,13 @@ export const DataService = {
       localStorage.setItem(STORAGE_KEY_SUBMISSIONS, JSON.stringify(updated));
     }
 
+    // Persist to server JSON database
+    fetch("/api/data", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "SUBMIT_WORK", submission: newSubmission }),
+    }).catch((err) => console.warn("Failed to persist submission to server:", err));
+
     const client = getClient();
     if (client?.models?.Submission) {
       client.models.Submission.create({
@@ -409,10 +691,36 @@ export const DataService = {
     return newSubmission;
   },
 
-  gradeSubmission(submissionId: string, grade: number, feedback: string): boolean {
+  gradeSubmission(
+    submissionId: string, 
+    grade: number, 
+    feedback: string, 
+    teacherId?: string, 
+    teacherName?: string
+  ): boolean {
     const submissions = this.getSubmissions();
     const index = submissions.findIndex((s) => s.id === submissionId);
     if (index === -1) return false;
+
+    // Verify course ownership if teacher identity provided
+    const sub = submissions[index];
+    const assignments = this.getAssignments();
+    const assign = assignments.find((a) => a.id === sub.assignmentId);
+    if (assign && teacherId) {
+      const courses = this.getCourses();
+      const course = courses.find((c) => c.id === assign.courseId || c.courseCode === assign.courseCode);
+      if (course) {
+        const isOwner = 
+          course.teacherId?.toLowerCase() === teacherId.toLowerCase() ||
+          (teacherId === "58291" && course.teacherId === "faculty-1") ||
+          (teacherName && course.teacherName && teacherName.toLowerCase() === course.teacherName.toLowerCase());
+        
+        if (!isOwner) {
+          console.warn("Unauthorized grade attempt by non-course teacher:", teacherId, course.teacherId);
+          return false;
+        }
+      }
+    }
 
     submissions[index].grade = grade;
     submissions[index].feedback = feedback;
@@ -421,6 +729,20 @@ export const DataService = {
     if (typeof window !== "undefined") {
       localStorage.setItem(STORAGE_KEY_SUBMISSIONS, JSON.stringify(submissions));
     }
+
+    // Persist grade to server JSON database
+    fetch("/api/data", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ 
+        action: "GRADE_SUBMISSION", 
+        submissionId, 
+        grade, 
+        feedback,
+        teacherId,
+        teacherName
+      }),
+    }).catch((err) => console.warn("Failed to persist grade to server:", err));
 
     const client = getClient();
     if (client?.models?.Submission) {
@@ -437,19 +759,35 @@ export const DataService = {
   },
 
   // ---------------- METRICS COMPUTATION ----------------
-  getStudentMetrics(studentId: string) {
+  getStudentMetrics(studentId: string, studentEmail?: string) {
     const courses = this.getCourses();
-    const assignments = this.getAssignments();
+    const allAssignments = this.getAssignments();
     const submissions = this.getSubmissions();
 
-    const enrolledCourses = courses.filter((c) => c.enrolledStudents.includes(studentId));
-    const studentSubmissions = submissions.filter((s) => s.studentId === studentId);
+    const enrolledCourses = courses.filter((c) =>
+      c.enrolledStudents.some((id) =>
+        id.toLowerCase() === studentId.toLowerCase() ||
+        (studentEmail && id.toLowerCase() === studentEmail.toLowerCase())
+      )
+    );
+
+    const enrolledCourseIds = new Set(enrolledCourses.map((c) => c.id));
+    const enrolledCourseCodes = new Set(enrolledCourses.map((c) => c.courseCode.toLowerCase()));
+
+    const enrolledAssignments = allAssignments.filter(
+      (a) => enrolledCourseIds.has(a.courseId) || enrolledCourseCodes.has(a.courseCode.toLowerCase())
+    );
+
+    const studentSubmissions = submissions.filter((s) =>
+      s.studentId.toLowerCase() === studentId.toLowerCase() ||
+      (studentEmail && s.studentId.toLowerCase() === studentEmail.toLowerCase())
+    );
     const gradedSubmissions = studentSubmissions.filter((s) => s.status === "GRADED" && s.grade !== undefined);
 
     let totalScore = 0;
     let totalMax = 0;
     gradedSubmissions.forEach((s) => {
-      const a = assignments.find((assign) => assign.id === s.assignmentId);
+      const a = enrolledAssignments.find((assign) => assign.id === s.assignmentId);
       if (a && s.grade !== undefined) {
         totalScore += s.grade;
         totalMax += a.maxMarks;
@@ -461,33 +799,39 @@ export const DataService = {
     return {
       enrolledCount: enrolledCourses.length,
       completedAssignments: studentSubmissions.length,
-      pendingCount: Math.max(0, assignments.length - studentSubmissions.length),
+      pendingCount: Math.max(0, enrolledAssignments.length - studentSubmissions.length),
       averageGrade,
       enrolledCourses,
+      enrolledAssignments,
     };
   },
 
-  getTeacherMetrics(teacherId?: string) {
+  getTeacherMetrics(teacherId?: string, teacherName?: string) {
     const allCourses = this.getCourses();
     const assignments = this.getAssignments();
     const submissions = this.getSubmissions();
 
-    // If teacherId provided, see if they teach specific courses
+    // If teacherId provided, strictly filter to courses they own
     const teacherOwned = teacherId 
-      ? allCourses.filter((c) => c.teacherId === teacherId)
+      ? allCourses.filter((c) => 
+          c.teacherId?.toLowerCase() === teacherId.toLowerCase() ||
+          (teacherId === "58291" && c.teacherId === "faculty-1") ||
+          (teacherName && c.teacherName && teacherName.toLowerCase() === c.teacherName.toLowerCase())
+        )
       : allCourses;
 
-    // Use teacher owned courses if available; otherwise show all courses
-    const courses = (teacherOwned && teacherOwned.length > 0) ? teacherOwned : allCourses;
+    // Strict courses: DO NOT fall back to other teachers' courses
+    const courses = teacherId ? teacherOwned : allCourses;
 
     const courseIds = new Set(courses.map((c) => c.id));
-    const courseCodes = new Set(courses.map((c) => c.courseCode));
+    const courseCodes = new Set(courses.map((c) => c.courseCode.toLowerCase()));
 
     const courseAssignments = assignments.filter(
-      (a) => courseIds.has(a.courseId) || courseCodes.has(a.courseCode)
+      (a) => courseIds.has(a.courseId) || courseCodes.has(a.courseCode.toLowerCase())
     );
     const assignmentIds = new Set(courseAssignments.map((a) => a.id));
 
+    // Only submissions for assignments belonging to the teacher's controlled courses!
     const pendingReviewSubmissions = submissions.filter(
       (s) => s.status === "SUBMITTED" && assignmentIds.has(s.assignmentId)
     );
@@ -542,6 +886,13 @@ export const DataService = {
       localStorage.setItem(STORAGE_KEY_RESOURCES, JSON.stringify(updated));
     }
 
+    // Persist to server JSON database
+    fetch("/api/data", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "ADD_RESOURCE", resource: newResource }),
+    }).catch((err) => console.warn("Failed to persist resource to server:", err));
+
     const client = getClient();
     if (client?.models?.CourseResource) {
       client.models.CourseResource.create({
@@ -566,6 +917,14 @@ export const DataService = {
     if (typeof window !== "undefined") {
       localStorage.setItem(STORAGE_KEY_RESOURCES, JSON.stringify(updated));
     }
+
+    // Persist to server JSON database
+    fetch("/api/data", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "DELETE_RESOURCE", resourceId }),
+    }).catch((err) => console.warn("Failed to persist resource delete to server:", err));
+
     return true;
   },
 };

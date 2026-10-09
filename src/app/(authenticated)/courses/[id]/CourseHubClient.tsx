@@ -28,7 +28,11 @@ import {
   X, 
   Trash2,
   ShieldCheck,
-  Check
+  Check,
+  Paperclip,
+  ExternalLink,
+  Loader2,
+  Lock
 } from "lucide-react";
 import Link from "next/link";
 
@@ -58,7 +62,10 @@ export default function CourseHubClient({ courseId }: CourseHubClientProps) {
   const [resTitle, setResTitle] = useState("");
   const [resDesc, setResDesc] = useState("");
   const [resFileName, setResFileName] = useState("");
+  const [resFileUrl, setResFileUrl] = useState("");
+  const [resFileSize, setResFileSize] = useState("");
   const [resType, setResType] = useState("Lecture Slides");
+  const [isUploadingResource, setIsUploadingResource] = useState(false);
 
   // Create Assignment Modal (Teacher)
   const [isAddAssignmentOpen, setIsAddAssignmentOpen] = useState(false);
@@ -71,6 +78,8 @@ export default function CourseHubClient({ courseId }: CourseHubClientProps) {
   const [submittingAssignment, setSubmittingAssignment] = useState<AssignmentData | null>(null);
   const [submissionNotes, setSubmissionNotes] = useState("");
   const [uploadedFileName, setUploadedFileName] = useState("");
+  const [uploadedFileUrl, setUploadedFileUrl] = useState("");
+  const [isUploadingSubmission, setIsUploadingSubmission] = useState(false);
 
   // Grade Modal (Teacher)
   const [gradingSubmission, setGradingSubmission] = useState<SubmissionData | null>(null);
@@ -117,12 +126,46 @@ export default function CourseHubClient({ courseId }: CourseHubClientProps) {
     );
   }
 
-  const isEnrolled = currentCourse.enrolledStudents.includes(studentIdentifier);
+  const isEnrolled = currentCourse.enrolledStudents.some((id) =>
+    id.toLowerCase() === studentIdentifier.toLowerCase() ||
+    (userProfile?.email && id.toLowerCase() === userProfile.email.toLowerCase())
+  );
   const isController = isTeacher && (currentCourse.teacherId === teacherIdentifier || (teacherIdentifier === "58291" && currentCourse.teacherId === "faculty-1"));
 
   const handleEnrollToggle = () => {
     DataService.enrollStudent(currentCourse.id, studentIdentifier);
     refreshCourseData();
+  };
+
+  const handleResourceFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsUploadingResource(true);
+    setResFileName(file.name);
+
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("category", "materials");
+
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await res.json();
+      if (data.success) {
+        setResFileUrl(data.fileUrl);
+        setResFileSize(data.fileSize || "2.4 MB");
+        if (!resTitle.trim()) {
+          setResTitle(file.name.replace(/\.[^/.]+$/, "").replace(/[-_]/g, " "));
+        }
+      }
+    } catch (err) {
+      console.error("Upload material error:", err);
+    } finally {
+      setIsUploadingResource(false);
+    }
   };
 
   const handleAddResource = (e: React.FormEvent) => {
@@ -134,13 +177,16 @@ export default function CourseHubClient({ courseId }: CourseHubClientProps) {
       title: resTitle.trim(),
       description: resDesc.trim() || "Course study document and reference materials.",
       fileName: resFileName.trim() || `${resTitle.toLowerCase().replace(/\s+/g, "_")}.pdf`,
+      fileUrl: resFileUrl || undefined,
       fileType: resType,
-      fileSize: "2.4 MB",
+      fileSize: resFileSize || "2.4 MB",
     });
 
     setResTitle("");
     setResDesc("");
     setResFileName("");
+    setResFileUrl("");
+    setResFileSize("");
     setIsAddResourceOpen(false);
     refreshCourseData();
   };
@@ -157,8 +203,8 @@ export default function CourseHubClient({ courseId }: CourseHubClientProps) {
     if (!assignTitle.trim()) return;
 
     DataService.createAssignment({
-      courseId: course.id,
-      courseCode: course.courseCode,
+      courseId: currentCourse.id,
+      courseCode: currentCourse.courseCode,
       title: assignTitle.trim(),
       instructions: assignInstructions.trim() || "Follow submission guidelines provided in the syllabus.",
       dueDate: assignDueDate,
@@ -179,13 +225,40 @@ export default function CourseHubClient({ courseId }: CourseHubClientProps) {
     }
   };
 
+  const handleSubmissionFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsUploadingSubmission(true);
+    setUploadedFileName(file.name);
+
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("category", "submissions");
+
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await res.json();
+      if (data.success) {
+        setUploadedFileUrl(data.fileUrl);
+      }
+    } catch (err) {
+      console.error("Upload submission error:", err);
+    } finally {
+      setIsUploadingSubmission(false);
+    }
+  };
+
   const handleSubmitWork = (e: React.FormEvent) => {
     e.preventDefault();
     if (!submittingAssignment) return;
 
     // Auto-enroll student if not enrolled yet
     if (!isEnrolled) {
-      DataService.enrollStudent(course.id, studentIdentifier);
+      DataService.enrollStudent(currentCourse.id, studentIdentifier);
     }
 
     DataService.submitWork({
@@ -193,31 +266,43 @@ export default function CourseHubClient({ courseId }: CourseHubClientProps) {
       studentId: studentIdentifier,
       studentName,
       fileName: uploadedFileName || "deliverable.zip",
+      fileUrl: uploadedFileUrl || undefined,
       notes: submissionNotes,
     });
 
     setSubmittingAssignment(null);
     setSubmissionNotes("");
     setUploadedFileName("");
+    setUploadedFileUrl("");
     refreshCourseData();
   };
 
   const handleSaveGrade = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!gradingSubmission) return;
+    if (!gradingSubmission || !isController) return;
 
     DataService.gradeSubmission(
       gradingSubmission.id,
       gradeScore,
-      gradeFeedback || "Excellent solution adhering to all specifications."
+      gradeFeedback || "Excellent solution adhering to all specifications.",
+      teacherIdentifier,
+      userProfile?.name
     );
 
     setGradingSubmission(null);
     refreshCourseData();
   };
 
-  const triggerDownload = (fileName: string) => {
-    setDownloadToast(`Initiating download for: ${fileName}`);
+  const triggerDownload = (fileName: string, fileUrl?: string) => {
+    if (fileUrl) {
+      const link = document.createElement("a");
+      link.href = fileUrl;
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+    setDownloadToast(`Opening file: ${fileName}`);
     setTimeout(() => {
       setDownloadToast(null);
     }, 3500);
@@ -396,7 +481,26 @@ export default function CourseHubClient({ courseId }: CourseHubClientProps) {
             )}
           </div>
 
-          {currentResources.length === 0 ? (
+          {/* Enrolled-only access gate for students */}
+          {!isTeacher && !isEnrolled ? (
+            <Card className="rounded-2xl border border-dashed border-border/80 bg-card/60 p-8 text-center shadow-xs">
+              <div className="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mx-auto mb-3">
+                <Lock className="w-6 h-6" />
+              </div>
+              <h3 className="font-serif font-bold text-lg text-foreground mb-1">
+                Study Materials Restricted
+              </h3>
+              <p className="text-xs text-muted-foreground max-w-md mx-auto mb-5 leading-relaxed">
+                Lecture slides, guides, and curriculum resources for {currentCourse.courseCode} are accessible only to students officially enrolled in this course.
+              </p>
+              <Button
+                onClick={handleEnrollToggle}
+                className="bg-primary hover:bg-primary/90 text-primary-foreground text-xs rounded-xl shadow-xs"
+              >
+                Enroll in {currentCourse.courseCode} to View Materials
+              </Button>
+            </Card>
+          ) : currentResources.length === 0 ? (
             <Card className="rounded-2xl border border-border bg-card p-8 text-center text-muted-foreground text-sm">
               <BookOpen className="w-8 h-8 text-primary mx-auto mb-2 opacity-60" />
               <p className="font-medium text-foreground">No study materials uploaded yet</p>
@@ -436,7 +540,7 @@ export default function CourseHubClient({ courseId }: CourseHubClientProps) {
                           size="sm" 
                           variant="outline" 
                           className="text-xs rounded-xl border-border flex items-center gap-1.5 hover:border-primary hover:text-primary"
-                          onClick={() => triggerDownload(res.fileName)}
+                          onClick={() => triggerDownload(res.fileName, res.fileUrl)}
                         >
                           <Download className="w-3.5 h-3.5" /> Download
                         </Button>
@@ -470,7 +574,26 @@ export default function CourseHubClient({ courseId }: CourseHubClientProps) {
             )}
           </div>
 
-          {currentAssignments.length === 0 ? (
+          {/* Enrolled-only access gate for assignments */}
+          {!isTeacher && !isEnrolled ? (
+            <Card className="rounded-2xl border border-dashed border-border/80 bg-card/60 p-8 text-center shadow-xs">
+              <div className="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mx-auto mb-3">
+                <Lock className="w-6 h-6" />
+              </div>
+              <h3 className="font-serif font-bold text-lg text-foreground mb-1">
+                Assignments Restricted
+              </h3>
+              <p className="text-xs text-muted-foreground max-w-md mx-auto mb-5 leading-relaxed">
+                Course deliverables, prompts, and grading rubrics for {currentCourse.courseCode} are accessible only to students officially enrolled in this course.
+              </p>
+              <Button
+                onClick={handleEnrollToggle}
+                className="bg-primary hover:bg-primary/90 text-primary-foreground text-xs rounded-xl shadow-xs"
+              >
+                Enroll in {currentCourse.courseCode} to View Assignments
+              </Button>
+            </Card>
+          ) : currentAssignments.length === 0 ? (
             <Card className="rounded-2xl border border-border bg-card p-8 text-center text-muted-foreground text-sm">
               <FileText className="w-8 h-8 text-primary mx-auto mb-2 opacity-60" />
               <p className="font-medium text-foreground">No assignments published for this course yet</p>
@@ -541,47 +664,88 @@ export default function CourseHubClient({ courseId }: CourseHubClientProps) {
                         {isTeacher ? (
                           /* Teacher Controls */
                           <div>
-                            {pendingSub ? (
-                              <Button
-                                size="sm"
-                                onClick={() => {
-                                  setGradingSubmission(pendingSub);
-                                  setGradeScore(95);
-                                  setGradeFeedback("");
-                                }}
-                                className="bg-primary hover:bg-primary/90 text-primary-foreground text-xs rounded-xl shadow-xs"
-                              >
-                                Grade ({pendingSub.studentName})
-                              </Button>
-                            ) : assignmentSubs.length > 0 ? (
-                              <span className="inline-flex items-center gap-1 text-xs text-primary font-medium bg-primary/10 px-3 py-1.5 rounded-xl">
-                                <CheckCircle2 className="w-3.5 h-3.5" /> All Graded
-                              </span>
+                            {isController ? (
+                              pendingSub ? (
+                                <Button
+                                  size="sm"
+                                  onClick={() => {
+                                    setGradingSubmission(pendingSub);
+                                    setGradeScore(95);
+                                    setGradeFeedback("");
+                                  }}
+                                  className="bg-primary hover:bg-primary/90 text-primary-foreground text-xs rounded-xl shadow-xs"
+                                >
+                                  Grade ({pendingSub.studentName})
+                                </Button>
+                              ) : assignmentSubs.length > 0 ? (
+                                <span className="inline-flex items-center gap-1 text-xs text-primary font-medium bg-primary/10 px-3 py-1.5 rounded-xl">
+                                  <CheckCircle2 className="w-3.5 h-3.5" /> All Graded
+                                </span>
+                              ) : (
+                                <span className="text-xs text-muted-foreground">No submissions</span>
+                              )
                             ) : (
-                              <span className="text-xs text-muted-foreground">No submissions</span>
+                              <span className="text-xs text-muted-foreground px-2.5 py-1 rounded-lg bg-muted/50 border border-border/40 flex items-center gap-1">
+                                <Lock className="w-3 h-3" /> Taught by {currentCourse.teacherName}
+                              </span>
                             )}
                           </div>
                         ) : (
                           /* Student Controls */
                           <div>
                             {!studentSub && (
-                              <Button 
-                                size="sm"
-                                onClick={() => setSubmittingAssignment(assignment)}
-                                className="bg-primary hover:bg-primary/90 text-primary-foreground text-xs rounded-xl shadow-xs flex items-center gap-1.5"
-                              >
-                                <UploadCloud className="w-3.5 h-3.5" /> Submit Work
-                              </Button>
+                              isEnrolled ? (
+                                <Button 
+                                  size="sm"
+                                  onClick={() => setSubmittingAssignment(assignment)}
+                                  className="bg-primary hover:bg-primary/90 text-primary-foreground text-xs rounded-xl shadow-xs flex items-center gap-1.5"
+                                >
+                                  <UploadCloud className="w-3.5 h-3.5" /> Submit Work
+                                </Button>
+                              ) : (
+                                <Button
+                                  size="sm"
+                                  onClick={handleEnrollToggle}
+                                  variant="outline"
+                                  className="text-xs rounded-xl flex items-center gap-1.5 text-primary border-primary/30 hover:bg-primary/10"
+                                >
+                                  <Plus className="w-3.5 h-3.5" /> Enroll to Submit
+                                </Button>
+                              )
                             )}
                             {studentSub?.status === 'SUBMITTED' && (
-                              <span className="inline-flex items-center gap-1 text-xs font-medium bg-secondary text-secondary-foreground px-3 py-1.5 rounded-xl border border-primary/20">
-                                <CheckCircle2 className="w-3.5 h-3.5 text-primary" /> Turned In
-                              </span>
+                              <div className="flex flex-col items-end gap-1.5">
+                                <span className="inline-flex items-center gap-1 text-xs font-medium bg-secondary text-secondary-foreground px-3 py-1.5 rounded-xl border border-primary/20">
+                                  <CheckCircle2 className="w-3.5 h-3.5 text-primary" /> Turned In
+                                </span>
+                                {studentSub.fileName && (
+                                  <button
+                                    onClick={() => triggerDownload(studentSub.fileName, studentSub.fileUrl)}
+                                    className="text-[11px] text-primary hover:underline flex items-center gap-1 max-w-[150px] truncate"
+                                    title={studentSub.fileName}
+                                  >
+                                    <Paperclip className="w-3 h-3 flex-shrink-0" />
+                                    <span className="truncate">{studentSub.fileName}</span>
+                                  </button>
+                                )}
+                              </div>
                             )}
                             {studentSub?.status === 'GRADED' && (
-                              <span className="inline-flex items-center gap-1 text-xs font-bold bg-primary/15 text-primary px-3 py-1.5 rounded-xl border border-primary/30">
-                                <Award className="w-3.5 h-3.5" /> {studentSub.grade} / {assignment.maxMarks}
-                              </span>
+                              <div className="flex flex-col items-end gap-1.5">
+                                <span className="inline-flex items-center gap-1 text-xs font-bold bg-primary/15 text-primary px-3 py-1.5 rounded-xl border border-primary/30">
+                                  <Award className="w-3.5 h-3.5" /> {studentSub.grade} / {assignment.maxMarks}
+                                </span>
+                                {studentSub.fileName && (
+                                  <button
+                                    onClick={() => triggerDownload(studentSub.fileName, studentSub.fileUrl)}
+                                    className="text-[11px] text-muted-foreground hover:text-foreground flex items-center gap-1 max-w-[150px] truncate"
+                                    title={studentSub.fileName}
+                                  >
+                                    <Paperclip className="w-3 h-3 flex-shrink-0" />
+                                    <span className="truncate">{studentSub.fileName}</span>
+                                  </button>
+                                )}
+                              </div>
                             )}
                           </div>
                         )}
@@ -652,6 +816,36 @@ export default function CourseHubClient({ courseId }: CourseHubClientProps) {
             </div>
             <form onSubmit={handleAddResource} className="space-y-4">
               <div>
+                <label className="text-xs font-semibold uppercase tracking-wider block mb-1">Upload Document / File</label>
+                <label className="border-2 border-dashed border-border rounded-xl p-4 text-center hover:border-primary/50 transition-colors bg-muted/30 cursor-pointer block">
+                  <input
+                    type="file"
+                    className="hidden"
+                    accept=".pdf,.doc,.docx,.ppt,.pptx,.txt,.zip"
+                    onChange={handleResourceFileSelect}
+                  />
+                  <div className="flex flex-col items-center">
+                    {isUploadingResource ? (
+                      <Loader2 className="w-6 h-6 text-primary animate-spin mb-1" />
+                    ) : (
+                      <UploadCloud className="w-6 h-6 text-primary mb-1" />
+                    )}
+                    <span className="text-xs text-foreground font-medium">
+                      {isUploadingResource ? "Uploading..." : "Click or browse to upload file"}
+                    </span>
+                    <span className="text-[10px] text-muted-foreground mt-0.5">
+                      Accepts PDF, PPT, DOC, TXT, ZIP
+                    </span>
+                    {resFileName && (
+                      <span className="text-xs text-primary font-bold mt-2 flex items-center gap-1">
+                        <Check className="w-3.5 h-3.5" /> {resFileName} {resFileSize ? `(${resFileSize})` : ""}
+                      </span>
+                    )}
+                  </div>
+                </label>
+              </div>
+
+              <div>
                 <label className="text-xs font-semibold uppercase tracking-wider block mb-1">Material Title</label>
                 <Input 
                   required 
@@ -661,6 +855,7 @@ export default function CourseHubClient({ courseId }: CourseHubClientProps) {
                   className="rounded-xl bg-muted/60"
                 />
               </div>
+
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="text-xs font-semibold uppercase tracking-wider block mb-1">Resource Type</label>
@@ -686,6 +881,7 @@ export default function CourseHubClient({ courseId }: CourseHubClientProps) {
                   />
                 </div>
               </div>
+
               <div>
                 <label className="text-xs font-semibold uppercase tracking-wider block mb-1">Description</label>
                 <textarea 
@@ -696,9 +892,16 @@ export default function CourseHubClient({ courseId }: CourseHubClientProps) {
                   className="w-full rounded-xl bg-muted/60 border border-input p-3 text-sm focus:ring-2 focus:ring-primary outline-none"
                 />
               </div>
+
               <div className="flex gap-3 pt-2">
                 <Button type="button" variant="outline" onClick={() => setIsAddResourceOpen(false)} className="flex-1 rounded-xl">Cancel</Button>
-                <Button type="submit" className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl">Add Material</Button>
+                <Button 
+                  type="submit" 
+                  disabled={isUploadingResource}
+                  className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl"
+                >
+                  {isUploadingResource ? "Uploading..." : "Save Material"}
+                </Button>
               </div>
             </form>
           </div>
@@ -786,27 +989,39 @@ export default function CourseHubClient({ courseId }: CourseHubClientProps) {
               <h2 className="text-xl font-bold font-serif">Turn in Deliverable</h2>
             </div>
             <p className="text-xs text-muted-foreground mb-4">
-              {submittingAssignment.title} ({course.courseCode})
+              {submittingAssignment.title} ({currentCourse.courseCode})
             </p>
             <form onSubmit={handleSubmitWork} className="space-y-4">
               <div>
-                <label className="text-xs font-semibold uppercase tracking-wider block mb-1">Attach File</label>
-                <div className="border-2 border-dashed border-border rounded-xl p-6 text-center hover:border-primary/50 transition-colors bg-muted/30">
-                  <UploadCloud className="w-8 h-8 text-primary mx-auto mb-2" />
-                  <p className="text-xs text-foreground font-medium">Select deliverable (.zip, .pdf)</p>
-                  {uploadedFileName ? (
-                    <p className="text-xs text-primary font-bold mt-2">Selected: {uploadedFileName}</p>
-                  ) : (
-                    <button
-                      type="button"
-                      onClick={() => setUploadedFileName("solution_package.zip")}
-                      className="mt-2 text-xs text-primary underline"
-                    >
-                      Attach solution_package.zip
-                    </button>
-                  )}
-                </div>
+                <label className="text-xs font-semibold uppercase tracking-wider block mb-1">Upload Deliverable / Solution File</label>
+                <label className="border-2 border-dashed border-border rounded-xl p-5 text-center hover:border-primary/50 transition-colors bg-muted/30 cursor-pointer block">
+                  <input
+                    type="file"
+                    className="hidden"
+                    accept=".zip,.pdf,.ts,.tsx,.js,.py,.docx,.txt"
+                    onChange={handleSubmissionFileSelect}
+                  />
+                  <div className="flex flex-col items-center">
+                    {isUploadingSubmission ? (
+                      <Loader2 className="w-7 h-7 text-primary animate-spin mb-1.5" />
+                    ) : (
+                      <UploadCloud className="w-7 h-7 text-primary mb-1.5" />
+                    )}
+                    <span className="text-xs text-foreground font-medium">
+                      {isUploadingSubmission ? "Uploading deliverable..." : "Click or browse to choose deliverable file"}
+                    </span>
+                    <span className="text-[11px] text-muted-foreground mt-0.5">
+                      Accepts .zip, .pdf, .ts, .py, .docx
+                    </span>
+                    {uploadedFileName && (
+                      <span className="text-xs text-primary font-bold mt-2 flex items-center gap-1">
+                        <Check className="w-3.5 h-3.5" /> {uploadedFileName}
+                      </span>
+                    )}
+                  </div>
+                </label>
               </div>
+
               <div>
                 <label className="text-xs font-semibold uppercase tracking-wider block mb-1">Notes for Instructor</label>
                 <textarea 
@@ -819,7 +1034,13 @@ export default function CourseHubClient({ courseId }: CourseHubClientProps) {
               </div>
               <div className="flex gap-3 pt-2">
                 <Button type="button" variant="outline" onClick={() => setSubmittingAssignment(null)} className="flex-1 rounded-xl">Cancel</Button>
-                <Button type="submit" className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl">Submit Deliverable</Button>
+                <Button 
+                  type="submit" 
+                  disabled={isUploadingSubmission}
+                  className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl"
+                >
+                  {isUploadingSubmission ? "Uploading..." : "Submit Deliverable"}
+                </Button>
               </div>
             </form>
           </div>
@@ -840,9 +1061,43 @@ export default function CourseHubClient({ courseId }: CourseHubClientProps) {
               <Award className="w-5 h-5 text-primary" />
               <h2 className="text-xl font-bold font-serif">Grade Student Deliverable</h2>
             </div>
-            <p className="text-xs text-muted-foreground mb-4">
+            <p className="text-xs text-muted-foreground mb-3">
               Student: <strong className="text-foreground">{gradingSubmission.studentName}</strong> ({gradingSubmission.studentId})
             </p>
+
+            {/* Deliverable File Inspection */}
+            <div className="mb-4 p-3 rounded-xl bg-muted/40 border border-border/80 flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2 min-w-0">
+                <div className="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center flex-shrink-0">
+                  <Paperclip className="w-4 h-4" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-xs font-semibold text-foreground truncate">
+                    {gradingSubmission.fileName || "Submitted deliverable"}
+                  </p>
+                  <p className="text-[10px] text-muted-foreground">
+                    Turned in on {gradingSubmission.submissionDate}
+                  </p>
+                </div>
+              </div>
+              <Button
+                type="button"
+                size="sm"
+                variant="outline"
+                onClick={() => triggerDownload(gradingSubmission.fileName, gradingSubmission.fileUrl)}
+                className="text-xs rounded-xl flex items-center gap-1.5 flex-shrink-0"
+              >
+                <Download className="w-3.5 h-3.5" /> Download
+              </Button>
+            </div>
+
+            {gradingSubmission.notes && (
+              <div className="mb-4 p-2.5 rounded-xl bg-muted/20 border border-border/40 text-xs">
+                <span className="font-semibold text-muted-foreground block text-[10px] uppercase tracking-wider mb-0.5">Student Notes</span>
+                <p className="text-foreground italic">"{gradingSubmission.notes}"</p>
+              </div>
+            )}
+
             <form onSubmit={handleSaveGrade} className="space-y-4">
               <div>
                 <label className="text-xs font-semibold uppercase tracking-wider block mb-1">Score (Out of 100)</label>

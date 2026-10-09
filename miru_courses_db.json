@@ -1,0 +1,394 @@
+{
+  "courses": [
+    {
+      "id": "course-cloud-arch",
+      "title": "Cloud Architecture Design",
+      "courseCode": "CSE4001",
+      "description": "Design resilient, scalable, distributed multi-cloud and serverless architectures with automated infrastructure.",
+      "teacherId": "58291",
+      "teacherName": "Prof. Kenneth Mori",
+      "isPublished": true,
+      "enrolledStudents": [
+        "24BRS1242",
+        "sagniksinghaishere@gmail.com",
+        "24BRS1004"
+      ]
+    },
+    {
+      "id": "course-swe",
+      "title": "Software Engineering",
+      "courseCode": "CSE3001",
+      "description": "Software development lifecycles, agile ceremonies, design patterns, microservices, and CI/CD pipelines.",
+      "teacherId": "98765",
+      "teacherName": "Prof. Sarah Lee",
+      "isPublished": true,
+      "enrolledStudents": [
+        "24BRS1242",
+        "sagniksinghaishere@gmail.com",
+        "24BRS1120"
+      ]
+    },
+    {
+      "id": "course-robot-prog",
+      "title": "Robot Programming",
+      "courseCode": "ROB3002",
+      "description": "Kinematics, ROS2 frameworks, motion planning, actuator control, and real-time robotic systems programming.",
+      "teacherId": "58291",
+      "teacherName": "Prof. Kenneth Mori",
+      "isPublished": true,
+      "enrolledStudents": [
+        "24BRS1055"
+      ]
+    },
+    {
+      "id": "course-ai",
+      "title": "Artificial Intelligence",
+      "courseCode": "CSE3002",
+      "description": "Heuristic search, probabilistic graphical models, reinforcement learning, and deep neural network representations.",
+      "teacherId": "98765",
+      "teacherName": "Prof. Sarah Lee",
+      "isPublished": true,
+      "enrolledStudents": [
+        "24BRS1004",
+        "24BRS1089"
+      ]
+    },
+    {
+      "id": "course-autonomous-drones",
+      "title": "Autonomous Drones",
+      "courseCode": "AER4003",
+      "description": "UAV aerodynamics, computer vision for obstacle avoidance, sensor fusion (IMU/GPS/LiDAR), and autonomous navigation.",
+      "teacherId": "58291",
+      "teacherName": "Prof. Kenneth Mori",
+      "isPublished": true,
+      "enrolledStudents": [
+        "24BRS1089",
+        "24BRS1120"
+      ]
+    },
+    {
+      "id": "course-daa",
+      "title": "Design and Analysis of Algorithms",
+      "courseCode": "CSE2002",
+      "description": "Divide and conquer, greedy strategies, dynamic programming, network flow, NP-completeness, and asymptotic analysis.",
+      "teacherId": "98765",
+      "teacherName": "Prof. Sarah Lee",
+      "isPublished": true,
+      "enrolledStudents": [
+        "24BRS1120",
+        "24BRS1055"
+      ]
+    },
+    {
+      "id": "course-dsa",
+      "title": "Data Structures and Algorithms",
+      "courseCode": "CSE2001",
+      "description": "Linear and hierarchical data structures: balanced search trees, heaps, hash maps, graphs, and amortized complexity.",
+      "teacherId": "58291",
+      "teacherName": "Prof. Kenneth Mori",
+      "isPublished": true,
+      "enrolledStudents": [
+        "24BRS1242",
+        "sagniksinghaishere@gmail.com",
+        "24BRS1004"
+      ]
+    },
+    {
+      "id": "course-eng-physics",
+      "title": "Engineering Physics",
+      "courseCode": "PHY1001",
+      "description": "Electromagnetic theory, quantum wave equations, optics, laser physics, and solid-state materials science.",
+      "teacherId": "98765",
+      "teacherName": "Prof. Sarah Lee",
+      "isPublished": true,
+      "enrolledStudents": [
+        "24BRS1089"
+      ]
+    },
+    {
+      "id": "course-eng-chemistry",
+      "title": "Engineering Chemistry",
+      "courseCode": "CHY1001",
+      "description": "Thermodynamics, electrochemical energy storage, molecular spectroscopy, corrosion engineering, and polymers.",
+      "teacherId": "58291",
+      "teacherName": "Prof. Kenneth Mori",
+      "isPublished": true,
+      "enrolledStudents": [
+        "24BRS1120"
+      ]
+    },
+    {
+      "id": "course-cvla",
+      "title": "Complex Variables and Linear Algebra",
+      "courseCode": "MAT2001",
+      "description": "Vector spaces, eigenvalues and eigenvectors, singular value decomposition, conformal mapping, and contour integration.",
+      "teacherId": "98765",
+      "teacherName": "Prof. Sarah Lee",
+      "isPublished": true,
+      "enrolledStudents": [
+        "24BRS1004"
+      ]
+    },
+    {
+      "id": "course-discrete-math",
+      "title": "Discrete Mathematics",
+      "courseCode": "MAT1002",
+      "description": "Propositional and predicate logic, set theory, combinatorics, recurrence relations, and graph theory proofs.",
+      "teacherId": "58291",
+      "teacherName": "Prof. Kenneth Mori",
+      "isPublished": true,
+      "enrolledStudents": [
+        "24BRS1055"
+      ]
+    }
+  ],
+  "assignments": [
+    {
+      "id": "assign-cloud-1",
+      "courseId": "course-cloud-arch",
+      "courseCode": "CSE4001",
+      "title": "High-Availability Multi-Region VPC Architecture",
+      "instructions": "Design a resilient AWS architecture spanning 2 regions with Route 53 latency routing and DynamoDB global tables.",
+      "dueDate": "2026-10-25",
+      "maxMarks": 100,
+      "isPublished": true
+    },
+    {
+      "id": "assign-swe-1",
+      "courseId": "course-swe",
+      "courseCode": "CSE3001",
+      "title": "Clean Architecture & Domain-Driven Design Spec",
+      "instructions": "Draft the software architecture document for a modular e-commerce engine using DDD aggregate roots and event sourcing.",
+      "dueDate": "2026-10-28",
+      "maxMarks": 100,
+      "isPublished": true
+    },
+    {
+      "id": "assign-robot-1",
+      "courseId": "course-robot-prog",
+      "courseCode": "ROB3002",
+      "title": "ROS2 Node Kinematic Inverse Solver",
+      "instructions": "Implement a 6-DOF robotic arm inverse kinematics solver utilizing Python and ROS2 Humble publishers.",
+      "dueDate": "2026-11-04",
+      "maxMarks": 100,
+      "isPublished": true
+    },
+    {
+      "id": "assign-ai-1",
+      "courseId": "course-ai",
+      "courseCode": "CSE3002",
+      "title": "A* Pathfinding & Minimax Game Theory Agent",
+      "instructions": "Build an adversarial search agent with alpha-beta pruning and an admissible heuristic distance metric.",
+      "dueDate": "2026-11-02",
+      "maxMarks": 100,
+      "isPublished": true
+    },
+    {
+      "id": "assign-drones-1",
+      "courseId": "course-autonomous-drones",
+      "courseCode": "AER4003",
+      "title": "Quadcopter PID Flight Controller Simulation",
+      "instructions": "Tune roll, pitch, and yaw PID loops for a quadrotor drone under 15 m/s turbulent wind gust vectors.",
+      "dueDate": "2026-11-10",
+      "maxMarks": 100,
+      "isPublished": true
+    },
+    {
+      "id": "assign-daa-1",
+      "courseId": "course-daa",
+      "courseCode": "CSE2002",
+      "title": "Dynamic Programming: Knapsack & Longest Common Subsequence",
+      "instructions": "Analyze recurrence relations, prove optimal substructure, and construct space-optimized bottom-up tables.",
+      "dueDate": "2026-10-30",
+      "maxMarks": 100,
+      "isPublished": true
+    },
+    {
+      "id": "assign-dsa-1",
+      "courseId": "course-dsa",
+      "courseCode": "CSE2001",
+      "title": "Self-Balancing Red-Black Tree Implementation",
+      "instructions": "Implement left/right tree rotations, recoloring rules, and verify logarithmic height invariants.",
+      "dueDate": "2026-10-22",
+      "maxMarks": 100,
+      "isPublished": true
+    },
+    {
+      "id": "assign-physics-1",
+      "courseId": "course-eng-physics",
+      "courseCode": "PHY1001",
+      "title": "Maxwell's Equations & Waveguide Boundary Solutions",
+      "instructions": "Derive TE and TM modes for rectangular electromagnetic waveguides with conducting boundary conditions.",
+      "dueDate": "2026-11-08",
+      "maxMarks": 50,
+      "isPublished": true
+    },
+    {
+      "id": "assign-chemistry-1",
+      "courseId": "course-eng-chemistry",
+      "courseCode": "CHY1001",
+      "title": "Lithium-Ion Battery Electrochemical Kinetics",
+      "instructions": "Calculate Nernst potential drifts and electrode degradation curves under cyclic thermal load stress.",
+      "dueDate": "2026-11-06",
+      "maxMarks": 50,
+      "isPublished": true
+    },
+    {
+      "id": "assign-cvla-1",
+      "courseId": "course-cvla",
+      "courseCode": "MAT2001",
+      "title": "Singular Value Decomposition & Image Compression",
+      "instructions": "Compute low-rank matrix approximations using SVD and prove orthogonality of singular vector bases.",
+      "dueDate": "2026-10-26",
+      "maxMarks": 100,
+      "isPublished": true
+    },
+    {
+      "id": "assign-discrete-1",
+      "courseId": "course-discrete-math",
+      "courseCode": "MAT1002",
+      "title": "Eulerian & Hamiltonian Graph Characterization Proofs",
+      "instructions": "Construct mathematical induction proofs for planar graph four-color theorem corollaries and isomorphism tests.",
+      "dueDate": "2026-10-24",
+      "maxMarks": 100,
+      "isPublished": true
+    }
+  ],
+  "submissions": [
+    {
+      "id": "sub-cloud-1",
+      "assignmentId": "assign-cloud-1",
+      "studentId": "24BRS1242",
+      "studentName": "Sagnik Singha",
+      "submissionDate": "2026-10-09",
+      "fileName": "cloud_architecture_vpc_solution.zip",
+      "notes": "Includes Terraform IaC scripts and architectural diagram.",
+      "status": "GRADED",
+      "grade": 98,
+      "feedback": "Outstanding architectural layout with excellent multi-AZ redundancy and security groups."
+    },
+    {
+      "id": "sub-dsa-1",
+      "assignmentId": "assign-dsa-1",
+      "studentId": "24BRS1242",
+      "studentName": "Sagnik Singha",
+      "submissionDate": "2026-10-08",
+      "fileName": "red_black_tree_src.zip",
+      "notes": "Full TypeScript test harness verifying rotation invariants.",
+      "status": "SUBMITTED"
+    }
+  ],
+  "resources": [
+    {
+      "id": "res-cloud-1",
+      "courseId": "course-cloud-arch",
+      "title": "AWS Well-Architected Framework: Reliability Pillar",
+      "description": "In-depth guide to multi-region disaster recovery, fault isolation, and auto-scaling architectures.",
+      "fileName": "well_architected_reliability.pdf",
+      "fileType": "Architecture Guide",
+      "fileSize": "4.2 MB",
+      "uploadedAt": "2026-10-01"
+    },
+    {
+      "id": "res-swe-1",
+      "courseId": "course-swe",
+      "title": "Clean Code & Agile Engineering Handbook",
+      "description": "SOLID principles, test-driven development, and microservice boundary decomposition.",
+      "fileName": "clean_software_engineering_handbook.pdf",
+      "fileType": "Study Guide",
+      "fileSize": "3.5 MB",
+      "uploadedAt": "2026-10-02"
+    },
+    {
+      "id": "res-robot-1",
+      "courseId": "course-robot-prog",
+      "title": "ROS2 Galactic Robotics Systems Architecture",
+      "description": "Robotics middleware, URDF modeling, Gazebo physics simulation, and transform trees.",
+      "fileName": "ros2_robot_programming_guide.pdf",
+      "fileType": "Lecture Slides",
+      "fileSize": "5.1 MB",
+      "uploadedAt": "2026-10-03"
+    },
+    {
+      "id": "res-ai-1",
+      "courseId": "course-ai",
+      "title": "Modern Artificial Intelligence Foundations",
+      "description": "Comprehensive syllabus on state-space search, Bayesian inference, and neural networks.",
+      "fileName": "ai_foundations_notes.pdf",
+      "fileType": "Lecture Notes",
+      "fileSize": "6.8 MB",
+      "uploadedAt": "2026-10-02"
+    },
+    {
+      "id": "res-drones-1",
+      "courseId": "course-autonomous-drones",
+      "title": "Autonomous UAV Flight Dynamics & Control",
+      "description": "State estimation, Kalman filtering, optical flow sensors, and trajectory generation.",
+      "fileName": "uav_flight_dynamics_notes.pdf",
+      "fileType": "Lecture Notes",
+      "fileSize": "4.6 MB",
+      "uploadedAt": "2026-10-04"
+    },
+    {
+      "id": "res-daa-1",
+      "courseId": "course-daa",
+      "title": "Algorithm Design Paradigms & Complexity Cheatsheet",
+      "description": "Proof templates for greedy choice properties and dynamic programming state transitions.",
+      "fileName": "daa_paradigms_cheatsheet.pdf",
+      "fileType": "Study Guide",
+      "fileSize": "2.8 MB",
+      "uploadedAt": "2026-10-03"
+    },
+    {
+      "id": "res-dsa-1",
+      "courseId": "course-dsa",
+      "title": "Advanced Data Structures Reference Manual",
+      "description": "B-Trees, Trie indices, Disjoint Set Union, and Fibonacci Heap operations with proofs.",
+      "fileName": "dsa_advanced_reference.pdf",
+      "fileType": "Study Guide",
+      "fileSize": "3.9 MB",
+      "uploadedAt": "2026-10-01"
+    },
+    {
+      "id": "res-physics-1",
+      "courseId": "course-eng-physics",
+      "title": "Engineering Physics: Quantum & Wave Optics",
+      "description": "Schrödinger wave equations, laser cavity resonators, and fiber optic attenuation physics.",
+      "fileName": "engineering_physics_vol1.pdf",
+      "fileType": "Lecture Slides",
+      "fileSize": "5.4 MB",
+      "uploadedAt": "2026-10-01"
+    },
+    {
+      "id": "res-chem-1",
+      "courseId": "course-eng-chemistry",
+      "title": "Engineering Chemistry: Electrochemistry & Materials",
+      "description": "Battery cells, corrosion mitigation, polymer composites, and green fuel cell chemistry.",
+      "fileName": "engineering_chemistry_notes.pdf",
+      "fileType": "Lecture Notes",
+      "fileSize": "4.1 MB",
+      "uploadedAt": "2026-10-02"
+    },
+    {
+      "id": "res-cvla-1",
+      "courseId": "course-cvla",
+      "title": "Linear Algebra & Complex Analysis Comprehensive Guide",
+      "description": "Orthogonal projections, Cauchy-Riemann equations, residue calculus, and Fourier transforms.",
+      "fileName": "cvla_mathematical_foundations.pdf",
+      "fileType": "Study Guide",
+      "fileSize": "4.9 MB",
+      "uploadedAt": "2026-10-03"
+    },
+    {
+      "id": "res-discrete-1",
+      "courseId": "course-discrete-math",
+      "courseCode": "MAT1002",
+      "title": "Discrete Mathematical Structures & Proof Systems",
+      "description": "Boolean algebra, graph traversal theorems, combinatorial counting, and pigeonhole applications.",
+      "fileName": "discrete_math_proofs.pdf",
+      "fileType": "Lecture Notes",
+      "fileSize": "3.3 MB",
+      "uploadedAt": "2026-10-02"
+    }
+  ]
+}

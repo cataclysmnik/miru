@@ -267,7 +267,7 @@ export function RoleAuthProvider({ children }: { children: React.ReactNode }) {
     } catch {}
 
     // 2. Look up profile in local/server registry
-    let profile = registry[trimmed.toUpperCase()] || registry[trimmed.toLowerCase()];
+    let profile: UserProfile | undefined = registry[trimmed.toUpperCase()] || registry[trimmed.toLowerCase()];
     if (!profile) {
       profile = Object.values(registry).find(
         (p) => p.idNumber?.toUpperCase() === trimmed.toUpperCase() || p.email?.toLowerCase() === trimmed.toLowerCase()

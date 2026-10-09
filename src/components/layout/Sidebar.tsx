@@ -1,5 +1,6 @@
 "use client";
 
+import React, { Suspense } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -15,7 +16,27 @@ import {
 } from "lucide-react";
 import { useAuthRole } from "@/context/RoleAuthContext";
 
-export function Sidebar() {
+function SidebarFallback() {
+  return (
+    <aside className="w-64 bg-card text-card-foreground border-r border-border hidden md:flex flex-col min-h-screen">
+      <div className="p-6 pb-3">
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 bg-primary rounded-full flex items-center justify-center shadow-sm">
+            <span className="text-primary-foreground font-serif italic text-xl leading-none mt-1">m</span>
+          </div>
+          <span className="font-serif font-bold text-2xl tracking-wide text-foreground">miru</span>
+        </div>
+      </div>
+      <div className="flex-1 px-4 space-y-2 mt-4">
+        <div className="h-10 rounded-xl bg-muted/40 animate-pulse" />
+        <div className="h-10 rounded-xl bg-muted/40 animate-pulse" />
+        <div className="h-10 rounded-xl bg-muted/40 animate-pulse" />
+      </div>
+    </aside>
+  );
+}
+
+function SidebarNav() {
   const pathname = usePathname();
   const { role, isTeacher, signOut } = useAuthRole();
 
@@ -60,7 +81,7 @@ export function Sidebar() {
 
       <nav className="flex-1 px-4 space-y-1.5 mt-4">
         {links.map((link) => {
-          const isActive = pathname === link.href || pathname.startsWith(`${link.href}/`);
+          const isActive = pathname === link.href || (pathname ? pathname.startsWith(`${link.href}/`) : false);
           const Icon = link.icon;
           
           return (
@@ -103,5 +124,13 @@ export function Sidebar() {
         </button>
       </div>
     </aside>
+  );
+}
+
+export function Sidebar() {
+  return (
+    <Suspense fallback={<SidebarFallback />}>
+      <SidebarNav />
+    </Suspense>
   );
 }
