@@ -1,0 +1,99 @@
+type UserProfile @model @auth(rules: [{allow: owner, ownerField: "owner"},
+  {allow: groups, operations: [read], groups: ["TEACHER"]}])
+{
+  id: ID! @primaryKey
+  cognitoId: String!
+  displayName: String!
+  email: String!
+  role: UserProfileRole
+}
+
+type Course @model @auth(rules: [{allow: groups, groups: ["TEACHER"]},
+  {allow: groups, operations: [read], groups: ["STUDENT"]}])
+{
+  id: ID! @primaryKey
+  title: String!
+  description: String
+  courseCode: String!
+  teacherId: String!
+  isPublished: Boolean @default(value: "false")
+  enrollments: [Enrollment] @hasMany(references: ["courseId"])
+  assignments: [Assignment] @hasMany(references: ["courseId"])
+  resources: [CourseResource] @hasMany(references: ["courseId"])
+}
+
+type Enrollment @model @auth(rules: [{allow: groups, groups: ["TEACHER"]},
+  {allow: groups, operations: [read], groups: ["STUDENT"]}])
+{
+  id: ID! @primaryKey
+  courseId: ID!
+  studentId: String!
+  status: EnrollmentStatus
+  enrolledAt: AWSDateTime!
+  course: Course @belongsTo(references: ["courseId"])
+}
+
+type CourseResource @model @auth(rules: [{allow: groups, groups: ["TEACHER"]},
+  {allow: groups, operations: [read], groups: ["STUDENT"]}])
+{
+  id: ID! @primaryKey
+  courseId: ID!
+  title: String!
+  description: String
+  s3Key: String!
+  originalFilename: String!
+  contentType: String!
+  fileSize: Int!
+  uploaderId: String!
+  course: Course @belongsTo(references: ["courseId"])
+}
+
+type Assignment @model @auth(rules: [{allow: groups, groups: ["TEACHER"]},
+  {allow: groups, operations: [read], groups: ["STUDENT"]}])
+{
+  id: ID! @primaryKey
+  courseId: ID!
+  title: String!
+  instructions: String!
+  dueDate: AWSDateTime!
+  maxMarks: Int!
+  isPublished: Boolean @default(value: "false")
+  allowedFileTypes: [String]
+  maxUploadSize: Int
+  course: Course @belongsTo(references: ["courseId"])
+  submissions: [Submission] @hasMany(references: ["assignmentId"])
+}
+
+type Submission @model @auth(rules: [{allow: owner, operations: [create, read, update], ownerField: "owner"},
+  {allow: groups, groups: ["TEACHER"]}])
+{
+  id: ID! @primaryKey
+  assignmentId: ID!
+  studentId: String!
+  s3Key: String
+  originalFilename: String
+  submissionDate: AWSDateTime
+  status: SubmissionStatus
+  marks: Int
+  feedback: String
+  graderId: String
+  gradedAt: AWSDateTime
+  assignment: Assignment @belongsTo(references: ["assignmentId"])
+}
+
+enum UserProfileRole {
+  STUDENT
+  TEACHER
+}
+
+enum EnrollmentStatus {
+  ACTIVE
+  DROPPED
+}
+
+enum SubmissionStatus {
+  NOT_SUBMITTED
+  SUBMITTED
+  LATE
+  GRADED
+}

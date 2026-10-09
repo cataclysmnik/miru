@@ -1,0 +1,2270 @@
+{
+ "Parameters": {
+  "DynamoDBModelTableReadIOPS": {
+   "Type": "Number",
+   "Default": 5,
+   "Description": "The number of read IOPS the table should support."
+  },
+  "DynamoDBModelTableWriteIOPS": {
+   "Type": "Number",
+   "Default": 5,
+   "Description": "The number of write IOPS the table should support."
+  },
+  "DynamoDBBillingMode": {
+   "Type": "String",
+   "Default": "PAY_PER_REQUEST",
+   "AllowedValues": [
+    "PAY_PER_REQUEST",
+    "PROVISIONED"
+   ],
+   "Description": "Configure @model types to create DynamoDB tables with PAY_PER_REQUEST or PROVISIONED billing modes."
+  },
+  "DynamoDBEnablePointInTimeRecovery": {
+   "Type": "String",
+   "Default": "false",
+   "AllowedValues": [
+    "true",
+    "false"
+   ],
+   "Description": "Whether to enable Point in Time Recovery on the table."
+  },
+  "DynamoDBEnableServerSideEncryption": {
+   "Type": "String",
+   "Default": "true",
+   "AllowedValues": [
+    "true",
+    "false"
+   ],
+   "Description": "Enable server side encryption powered by KMS."
+  },
+  "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataAmplifyTableManagerNestedStackAmplifyTableManagerNestedStackResourceB0AECA66OutputsamplifymiruNiksandboxa60578d1c9dataamplifyDataAmplifyTableManagerTableManagerCustomProviderframework92CA218D": {
+   "Type": "String"
+  },
+  "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPI39909BBAApiId": {
+   "Type": "String"
+  },
+  "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPINONEDSB2CCC063Name": {
+   "Type": "String"
+  },
+  "referencetoamplifymiruNiksandboxa60578d1c9authNestedStackauthNestedStackResourceB7EBACB3OutputsamplifymiruNiksandboxa60578d1c9authamplifyAuthauthenticatedUserRole2F03F36DRef": {
+   "Type": "String"
+  },
+  "referencetoamplifymiruNiksandboxa60578d1c9authNestedStackauthNestedStackResourceB7EBACB3OutputsamplifymiruNiksandboxa60578d1c9authamplifyAuthunauthenticatedUserRole0DF3EC29Ref": {
+   "Type": "String"
+  },
+  "referencetoamplifymiruNiksandboxa60578d1c9authNestedStackauthNestedStackResourceB7EBACB3OutputsamplifymiruNiksandboxa60578d1c9authamplifyAuthIdentityPool40FF0EB3Ref": {
+   "Type": "String"
+  }
+ },
+ "Conditions": {
+  "HasEnvironmentParameter": {
+   "Fn::Not": [
+    {
+     "Fn::Equals": [
+      "NONE",
+      "NONE"
+     ]
+    }
+   ]
+  },
+  "ShouldUsePayPerRequestBilling": {
+   "Fn::Equals": [
+    {
+     "Ref": "DynamoDBBillingMode"
+    },
+    "PAY_PER_REQUEST"
+   ]
+  },
+  "ShouldUsePointInTimeRecovery": {
+   "Fn::Equals": [
+    {
+     "Ref": "DynamoDBEnablePointInTimeRecovery"
+    },
+    "true"
+   ]
+  },
+  "CDKMetadataAvailable": {
+   "Fn::Or": [
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "af-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-northeast-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-northeast-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-northeast-3"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-south-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-3"
+       ]
+      }
+     ]
+    },
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-4"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ca-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ca-west-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "cn-north-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "cn-northwest-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-central-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-north-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-south-2"
+       ]
+      }
+     ]
+    },
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-3"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "il-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "me-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "me-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "sa-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-east-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-west-1"
+       ]
+      }
+     ]
+    },
+    {
+     "Fn::Equals": [
+      {
+       "Ref": "AWS::Region"
+      },
+      "us-west-2"
+     ]
+    }
+   ]
+  }
+ },
+ "Resources": {
+  "CourseResourceTable": {
+   "Type": "Custom::AmplifyDynamoDBTable",
+   "Properties": {
+    "ServiceToken": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataAmplifyTableManagerNestedStackAmplifyTableManagerNestedStackResourceB0AECA66OutputsamplifymiruNiksandboxa60578d1c9dataamplifyDataAmplifyTableManagerTableManagerCustomProviderframework92CA218D"
+    },
+    "tableName": {
+     "Fn::Join": [
+      "",
+      [
+       "CourseResource-",
+       {
+        "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPI39909BBAApiId"
+       },
+       "-NONE"
+      ]
+     ]
+    },
+    "attributeDefinitions": [
+     {
+      "attributeName": "id",
+      "attributeType": "S"
+     },
+     {
+      "attributeName": "courseId",
+      "attributeType": "S"
+     }
+    ],
+    "keySchema": [
+     {
+      "attributeName": "id",
+      "keyType": "HASH"
+     }
+    ],
+    "globalSecondaryIndexes": [
+     {
+      "indexName": "gsi-Course.resources",
+      "keySchema": [
+       {
+        "attributeName": "courseId",
+        "keyType": "HASH"
+       }
+      ],
+      "projection": {
+       "projectionType": "ALL"
+      },
+      "provisionedThroughput": {
+       "Fn::If": [
+        "ShouldUsePayPerRequestBilling",
+        {
+         "Ref": "AWS::NoValue"
+        },
+        {
+         "ReadCapacityUnits": {
+          "Ref": "DynamoDBModelTableReadIOPS"
+         },
+         "WriteCapacityUnits": {
+          "Ref": "DynamoDBModelTableWriteIOPS"
+         }
+        }
+       ]
+      }
+     }
+    ],
+    "provisionedThroughput": {
+     "Fn::If": [
+      "ShouldUsePayPerRequestBilling",
+      {
+       "Ref": "AWS::NoValue"
+      },
+      {
+       "ReadCapacityUnits": {
+        "Ref": "DynamoDBModelTableReadIOPS"
+       },
+       "WriteCapacityUnits": {
+        "Ref": "DynamoDBModelTableWriteIOPS"
+       }
+      }
+     ]
+    },
+    "sseSpecification": {
+     "sseEnabled": false
+    },
+    "streamSpecification": {
+     "streamViewType": "NEW_AND_OLD_IMAGES"
+    },
+    "deletionProtectionEnabled": false,
+    "allowDestructiveGraphqlSchemaUpdates": true,
+    "replaceTableUponGsiUpdate": true,
+    "pointInTimeRecoverySpecification": {
+     "Fn::If": [
+      "ShouldUsePointInTimeRecovery",
+      {
+       "PointInTimeRecoveryEnabled": true
+      },
+      {
+       "Ref": "AWS::NoValue"
+      }
+     ]
+    },
+    "billingMode": {
+     "Fn::If": [
+      "ShouldUsePayPerRequestBilling",
+      "PAY_PER_REQUEST",
+      {
+       "Ref": "AWS::NoValue"
+      }
+     ]
+    }
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-miru-Nik-sandbox-a60578d1c9/data/amplifyData/CourseResource/CourseResourceTable/Default/Default"
+   }
+  },
+  "CourseResourceIAMRole4B317550": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "appsync.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "Policies": [
+     {
+      "PolicyDocument": {
+       "Statement": [
+        {
+         "Action": [
+          "dynamodb:BatchGetItem",
+          "dynamodb:BatchWriteItem",
+          "dynamodb:PutItem",
+          "dynamodb:DeleteItem",
+          "dynamodb:GetItem",
+          "dynamodb:Scan",
+          "dynamodb:Query",
+          "dynamodb:UpdateItem",
+          "dynamodb:ConditionCheckItem",
+          "dynamodb:DescribeTable",
+          "dynamodb:GetRecords",
+          "dynamodb:GetShardIterator"
+         ],
+         "Effect": "Allow",
+         "Resource": [
+          {
+           "Fn::Sub": [
+            "arn:${AWS::Partition}:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${tablename}",
+            {
+             "tablename": {
+              "Fn::Join": [
+               "",
+               [
+                "CourseResource-",
+                {
+                 "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPI39909BBAApiId"
+                },
+                "-NONE"
+               ]
+              ]
+             }
+            }
+           ]
+          },
+          {
+           "Fn::Sub": [
+            "arn:${AWS::Partition}:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${tablename}/*",
+            {
+             "tablename": {
+              "Fn::Join": [
+               "",
+               [
+                "CourseResource-",
+                {
+                 "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPI39909BBAApiId"
+                },
+                "-NONE"
+               ]
+              ]
+             }
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "Version": "2012-10-17"
+      },
+      "PolicyName": "DynamoDBAccess"
+     }
+    ],
+    "RoleName": {
+     "Fn::Join": [
+      "",
+      [
+       "CourseResourceIAMRol36e19b-",
+       {
+        "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPI39909BBAApiId"
+       },
+       "-NONE"
+      ]
+     ]
+    },
+    "Tags": [
+     {
+      "Key": "amplify:deployment-type",
+      "Value": "sandbox"
+     },
+     {
+      "Key": "amplify:friendly-name",
+      "Value": "amplifyData"
+     },
+     {
+      "Key": "created-by",
+      "Value": "amplify"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-miru-Nik-sandbox-a60578d1c9/data/amplifyData/CourseResource/CourseResourceIAMRole/Resource"
+   }
+  },
+  "CourseResourceDataSource": {
+   "Type": "AWS::AppSync::DataSource",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPI39909BBAApiId"
+    },
+    "DynamoDBConfig": {
+     "AwsRegion": {
+      "Ref": "AWS::Region"
+     },
+     "TableName": {
+      "Fn::Select": [
+       1,
+       {
+        "Fn::Split": [
+         "/",
+         {
+          "Fn::Select": [
+           5,
+           {
+            "Fn::Split": [
+             ":",
+             {
+              "Fn::GetAtt": [
+               "CourseResourceTable",
+               "TableArn"
+              ]
+             }
+            ]
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    },
+    "Name": "CourseResourceTable",
+    "ServiceRoleArn": {
+     "Fn::GetAtt": [
+      "CourseResourceIAMRole4B317550",
+      "Arn"
+     ]
+    },
+    "Type": "AMAZON_DYNAMODB"
+   },
+   "DependsOn": [
+    "CourseResourceIAMRole4B317550"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-miru-Nik-sandbox-a60578d1c9/data/amplifyData/CourseResource/CourseResourceDataSource/Resource"
+   }
+  },
+  "QuerygetCourseResourcepreAuth0FunctionQuerygetCourseResourcepreAuth0FunctionAppSyncFunction11B7808A": {
+   "Type": "AWS::AppSync::FunctionConfiguration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPI39909BBAApiId"
+    },
+    "DataSourceName": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPINONEDSB2CCC063Name"
+    },
+    "FunctionVersion": "2018-05-29",
+    "Name": "QuerygetCourseResourcepreAuth0Function",
+    "RequestMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/ffc597e18023b530e6afcbe02cee647d49550fa9e77bd06f1dee09d8b1be8de3.vtl"
+    },
+    "ResponseMappingTemplate": "$util.toJson({})"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-miru-Nik-sandbox-a60578d1c9/data/amplifyData/CourseResource/QuerygetCourseResourcepreAuth0Function/QuerygetCourseResourcepreAuth0Function.AppSyncFunction"
+   }
+  },
+  "QuerygetCourseResourceauth0FunctionQuerygetCourseResourceauth0FunctionAppSyncFunction11F5DAEC": {
+   "Type": "AWS::AppSync::FunctionConfiguration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPI39909BBAApiId"
+    },
+    "DataSourceName": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPINONEDSB2CCC063Name"
+    },
+    "FunctionVersion": "2018-05-29",
+    "Name": "QuerygetCourseResourceauth0Function",
+    "RequestMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/16bfa9b8b49cd3b9c9cfc91a4a1475ea7090ff6b5fbf625bd02ec2bc6a016ec8.vtl"
+    },
+    "ResponseMappingTemplate": "$util.toJson({})"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-miru-Nik-sandbox-a60578d1c9/data/amplifyData/CourseResource/QuerygetCourseResourceauth0Function/QuerygetCourseResourceauth0Function.AppSyncFunction"
+   }
+  },
+  "QuerygetCourseResourcepostAuth0FunctionQuerygetCourseResourcepostAuth0FunctionAppSyncFunction5BC92633": {
+   "Type": "AWS::AppSync::FunctionConfiguration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPI39909BBAApiId"
+    },
+    "DataSourceName": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPINONEDSB2CCC063Name"
+    },
+    "FunctionVersion": "2018-05-29",
+    "Name": "QuerygetCourseResourcepostAuth0Function",
+    "RequestMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/c1721bcd774e27c514d3454b5be4f9bdd094c0161b57ddf053d618e3b0086a77.vtl"
+    },
+    "ResponseMappingTemplate": "$util.toJson({})"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-miru-Nik-sandbox-a60578d1c9/data/amplifyData/CourseResource/QuerygetCourseResourcepostAuth0Function/QuerygetCourseResourcepostAuth0Function.AppSyncFunction"
+   }
+  },
+  "QueryGetCourseResourceDataResolverFnQueryGetCourseResourceDataResolverFnAppSyncFunction981F18C6": {
+   "Type": "AWS::AppSync::FunctionConfiguration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPI39909BBAApiId"
+    },
+    "DataSourceName": {
+     "Fn::GetAtt": [
+      "CourseResourceDataSource",
+      "Name"
+     ]
+    },
+    "FunctionVersion": "2018-05-29",
+    "Name": "QueryGetCourseResourceDataResolverFn",
+    "RequestMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/08f4d557693d96c1a4efba0f9dc91330e4b19772fd5477c156468843e3d9cb5e.vtl"
+    },
+    "ResponseMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/4c6a2d29f01c6091bd1d9afe16e5849d456c96f17c3b215938c8067399532719.vtl"
+    }
+   },
+   "DependsOn": [
+    "CourseResourceDataSource"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-miru-Nik-sandbox-a60578d1c9/data/amplifyData/CourseResource/QueryGetCourseResourceDataResolverFn/QueryGetCourseResourceDataResolverFn.AppSyncFunction"
+   }
+  },
+  "GetCourseResourceResolver": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPI39909BBAApiId"
+    },
+    "FieldName": "getCourseResource",
+    "Kind": "PIPELINE",
+    "PipelineConfig": {
+     "Functions": [
+      {
+       "Fn::GetAtt": [
+        "QuerygetCourseResourcepreAuth0FunctionQuerygetCourseResourcepreAuth0FunctionAppSyncFunction11B7808A",
+        "FunctionId"
+       ]
+      },
+      {
+       "Fn::GetAtt": [
+        "QuerygetCourseResourceauth0FunctionQuerygetCourseResourceauth0FunctionAppSyncFunction11F5DAEC",
+        "FunctionId"
+       ]
+      },
+      {
+       "Fn::GetAtt": [
+        "QuerygetCourseResourcepostAuth0FunctionQuerygetCourseResourcepostAuth0FunctionAppSyncFunction5BC92633",
+        "FunctionId"
+       ]
+      },
+      {
+       "Fn::GetAtt": [
+        "QueryGetCourseResourceDataResolverFnQueryGetCourseResourceDataResolverFnAppSyncFunction981F18C6",
+        "FunctionId"
+       ]
+      }
+     ]
+    },
+    "RequestMappingTemplate": {
+     "Fn::Join": [
+      "",
+      [
+       "$util.qr($ctx.stash.put(\"typeName\", \"Query\"))\n$util.qr($ctx.stash.put(\"fieldName\", \"getCourseResource\"))\n$util.qr($ctx.stash.put(\"conditions\", []))\n$util.qr($ctx.stash.put(\"metadata\", {}))\n$util.qr($ctx.stash.metadata.put(\"dataSourceType\", \"AMAZON_DYNAMODB\"))\n$util.qr($ctx.stash.metadata.put(\"apiId\", \"",
+       {
+        "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPI39909BBAApiId"
+       },
+       "\"))\n$util.qr($ctx.stash.put(\"connectionAttributes\", {}))\n$util.qr($ctx.stash.put(\"tableName\", \"",
+       {
+        "Fn::Select": [
+         1,
+         {
+          "Fn::Split": [
+           "/",
+           {
+            "Fn::Select": [
+             5,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Fn::GetAtt": [
+                 "CourseResourceTable",
+                 "TableArn"
+                ]
+               }
+              ]
+             }
+            ]
+           }
+          ]
+         }
+        ]
+       },
+       "\"))\n$util.qr($ctx.stash.put(\"authRole\", \"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":sts::",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":assumed-role/",
+       {
+        "Ref": "referencetoamplifymiruNiksandboxa60578d1c9authNestedStackauthNestedStackResourceB7EBACB3OutputsamplifymiruNiksandboxa60578d1c9authamplifyAuthauthenticatedUserRole2F03F36DRef"
+       },
+       "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"unauthRole\", \"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":sts::",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":assumed-role/",
+       {
+        "Ref": "referencetoamplifymiruNiksandboxa60578d1c9authNestedStackauthNestedStackResourceB7EBACB3OutputsamplifymiruNiksandboxa60578d1c9authamplifyAuthunauthenticatedUserRole0DF3EC29Ref"
+       },
+       "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"identityPoolId\", \"",
+       {
+        "Ref": "referencetoamplifymiruNiksandboxa60578d1c9authNestedStackauthNestedStackResourceB7EBACB3OutputsamplifymiruNiksandboxa60578d1c9authamplifyAuthIdentityPool40FF0EB3Ref"
+       },
+       "\"))\n$util.qr($ctx.stash.put(\"adminRoles\", []))\n$util.toJson({})"
+      ]
+     ]
+    },
+    "ResponseMappingTemplate": "$util.toJson($ctx.prev.result)",
+    "TypeName": "Query"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-miru-Nik-sandbox-a60578d1c9/data/amplifyData/CourseResource/queryGetCourseResourceResolver"
+   }
+  },
+  "QuerylistCourseResourcespreAuth0FunctionQuerylistCourseResourcespreAuth0FunctionAppSyncFunctionE557EEA0": {
+   "Type": "AWS::AppSync::FunctionConfiguration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPI39909BBAApiId"
+    },
+    "DataSourceName": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPINONEDSB2CCC063Name"
+    },
+    "FunctionVersion": "2018-05-29",
+    "Name": "QuerylistCourseResourcespreAuth0Function",
+    "RequestMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/3e81312d4c75951808eda9fcd5f854c1925c0b819de0939f09c4fe2eebb190b8.vtl"
+    },
+    "ResponseMappingTemplate": "$util.toJson({})"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-miru-Nik-sandbox-a60578d1c9/data/amplifyData/CourseResource/QuerylistCourseResourcespreAuth0Function/QuerylistCourseResourcespreAuth0Function.AppSyncFunction"
+   }
+  },
+  "QuerylistCourseResourcesauth0FunctionQuerylistCourseResourcesauth0FunctionAppSyncFunction7F2B6C09": {
+   "Type": "AWS::AppSync::FunctionConfiguration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPI39909BBAApiId"
+    },
+    "DataSourceName": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPINONEDSB2CCC063Name"
+    },
+    "FunctionVersion": "2018-05-29",
+    "Name": "QuerylistCourseResourcesauth0Function",
+    "RequestMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/16bfa9b8b49cd3b9c9cfc91a4a1475ea7090ff6b5fbf625bd02ec2bc6a016ec8.vtl"
+    },
+    "ResponseMappingTemplate": "$util.toJson({})"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-miru-Nik-sandbox-a60578d1c9/data/amplifyData/CourseResource/QuerylistCourseResourcesauth0Function/QuerylistCourseResourcesauth0Function.AppSyncFunction"
+   }
+  },
+  "QuerylistCourseResourcespostAuth0FunctionQuerylistCourseResourcespostAuth0FunctionAppSyncFunction403EA782": {
+   "Type": "AWS::AppSync::FunctionConfiguration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPI39909BBAApiId"
+    },
+    "DataSourceName": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPINONEDSB2CCC063Name"
+    },
+    "FunctionVersion": "2018-05-29",
+    "Name": "QuerylistCourseResourcespostAuth0Function",
+    "RequestMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/c1721bcd774e27c514d3454b5be4f9bdd094c0161b57ddf053d618e3b0086a77.vtl"
+    },
+    "ResponseMappingTemplate": "$util.toJson({})"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-miru-Nik-sandbox-a60578d1c9/data/amplifyData/CourseResource/QuerylistCourseResourcespostAuth0Function/QuerylistCourseResourcespostAuth0Function.AppSyncFunction"
+   }
+  },
+  "QueryListCourseResourcesDataResolverFnQueryListCourseResourcesDataResolverFnAppSyncFunctionA7FFAED0": {
+   "Type": "AWS::AppSync::FunctionConfiguration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPI39909BBAApiId"
+    },
+    "DataSourceName": {
+     "Fn::GetAtt": [
+      "CourseResourceDataSource",
+      "Name"
+     ]
+    },
+    "FunctionVersion": "2018-05-29",
+    "Name": "QueryListCourseResourcesDataResolverFn",
+    "RequestMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/9fcbe070ecd3023c5bf5b966fa9584757db9762eef123bad0820bd87591b2174.vtl"
+    },
+    "ResponseMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/cc01911d0269d4080ea57505dc445dfc315ef7ad85d3d9d4ea1357858bff451d.vtl"
+    }
+   },
+   "DependsOn": [
+    "CourseResourceDataSource"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-miru-Nik-sandbox-a60578d1c9/data/amplifyData/CourseResource/QueryListCourseResourcesDataResolverFn/QueryListCourseResourcesDataResolverFn.AppSyncFunction"
+   }
+  },
+  "ListCourseResourceResolver": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPI39909BBAApiId"
+    },
+    "FieldName": "listCourseResources",
+    "Kind": "PIPELINE",
+    "PipelineConfig": {
+     "Functions": [
+      {
+       "Fn::GetAtt": [
+        "QuerylistCourseResourcespreAuth0FunctionQuerylistCourseResourcespreAuth0FunctionAppSyncFunctionE557EEA0",
+        "FunctionId"
+       ]
+      },
+      {
+       "Fn::GetAtt": [
+        "QuerylistCourseResourcesauth0FunctionQuerylistCourseResourcesauth0FunctionAppSyncFunction7F2B6C09",
+        "FunctionId"
+       ]
+      },
+      {
+       "Fn::GetAtt": [
+        "QuerylistCourseResourcespostAuth0FunctionQuerylistCourseResourcespostAuth0FunctionAppSyncFunction403EA782",
+        "FunctionId"
+       ]
+      },
+      {
+       "Fn::GetAtt": [
+        "QueryListCourseResourcesDataResolverFnQueryListCourseResourcesDataResolverFnAppSyncFunctionA7FFAED0",
+        "FunctionId"
+       ]
+      }
+     ]
+    },
+    "RequestMappingTemplate": {
+     "Fn::Join": [
+      "",
+      [
+       "$util.qr($ctx.stash.put(\"typeName\", \"Query\"))\n$util.qr($ctx.stash.put(\"fieldName\", \"listCourseResources\"))\n$util.qr($ctx.stash.put(\"conditions\", []))\n$util.qr($ctx.stash.put(\"metadata\", {}))\n$util.qr($ctx.stash.metadata.put(\"dataSourceType\", \"AMAZON_DYNAMODB\"))\n$util.qr($ctx.stash.metadata.put(\"apiId\", \"",
+       {
+        "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPI39909BBAApiId"
+       },
+       "\"))\n$util.qr($ctx.stash.put(\"connectionAttributes\", {}))\n$util.qr($ctx.stash.put(\"tableName\", \"",
+       {
+        "Fn::Select": [
+         1,
+         {
+          "Fn::Split": [
+           "/",
+           {
+            "Fn::Select": [
+             5,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Fn::GetAtt": [
+                 "CourseResourceTable",
+                 "TableArn"
+                ]
+               }
+              ]
+             }
+            ]
+           }
+          ]
+         }
+        ]
+       },
+       "\"))\n$util.qr($ctx.stash.put(\"authRole\", \"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":sts::",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":assumed-role/",
+       {
+        "Ref": "referencetoamplifymiruNiksandboxa60578d1c9authNestedStackauthNestedStackResourceB7EBACB3OutputsamplifymiruNiksandboxa60578d1c9authamplifyAuthauthenticatedUserRole2F03F36DRef"
+       },
+       "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"unauthRole\", \"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":sts::",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":assumed-role/",
+       {
+        "Ref": "referencetoamplifymiruNiksandboxa60578d1c9authNestedStackauthNestedStackResourceB7EBACB3OutputsamplifymiruNiksandboxa60578d1c9authamplifyAuthunauthenticatedUserRole0DF3EC29Ref"
+       },
+       "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"identityPoolId\", \"",
+       {
+        "Ref": "referencetoamplifymiruNiksandboxa60578d1c9authNestedStackauthNestedStackResourceB7EBACB3OutputsamplifymiruNiksandboxa60578d1c9authamplifyAuthIdentityPool40FF0EB3Ref"
+       },
+       "\"))\n$util.qr($ctx.stash.put(\"adminRoles\", []))\n$util.toJson({})"
+      ]
+     ]
+    },
+    "ResponseMappingTemplate": "$util.toJson($ctx.prev.result)",
+    "TypeName": "Query"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-miru-Nik-sandbox-a60578d1c9/data/amplifyData/CourseResource/queryListCourseResourcesResolver"
+   }
+  },
+  "MutationcreateCourseResourceinit0FunctionMutationcreateCourseResourceinit0FunctionAppSyncFunctionEBAB5D2C": {
+   "Type": "AWS::AppSync::FunctionConfiguration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPI39909BBAApiId"
+    },
+    "DataSourceName": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPINONEDSB2CCC063Name"
+    },
+    "FunctionVersion": "2018-05-29",
+    "Name": "MutationcreateCourseResourceinit0Function",
+    "RequestMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/a183ddccbd956316c38ef97177b8f088ef0826f62023323f5ae6053d348ccffc.vtl"
+    },
+    "ResponseMappingTemplate": "$util.toJson({})"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-miru-Nik-sandbox-a60578d1c9/data/amplifyData/CourseResource/MutationcreateCourseResourceinit0Function/MutationcreateCourseResourceinit0Function.AppSyncFunction"
+   }
+  },
+  "MutationcreateCourseResourcepreAuth0FunctionMutationcreateCourseResourcepreAuth0FunctionAppSyncFunctionB33A8287": {
+   "Type": "AWS::AppSync::FunctionConfiguration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPI39909BBAApiId"
+    },
+    "DataSourceName": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPINONEDSB2CCC063Name"
+    },
+    "FunctionVersion": "2018-05-29",
+    "Name": "MutationcreateCourseResourcepreAuth0Function",
+    "RequestMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/39fb35c6f8e8573ffe3a63ba867cf543b05af129a104b387a44f03c3d85da0c3.vtl"
+    },
+    "ResponseMappingTemplate": "$util.toJson({})"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-miru-Nik-sandbox-a60578d1c9/data/amplifyData/CourseResource/MutationcreateCourseResourcepreAuth0Function/MutationcreateCourseResourcepreAuth0Function.AppSyncFunction"
+   }
+  },
+  "MutationcreateCourseResourceauth0FunctionMutationcreateCourseResourceauth0FunctionAppSyncFunction7F3EE58B": {
+   "Type": "AWS::AppSync::FunctionConfiguration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPI39909BBAApiId"
+    },
+    "DataSourceName": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPINONEDSB2CCC063Name"
+    },
+    "FunctionVersion": "2018-05-29",
+    "Name": "MutationcreateCourseResourceauth0Function",
+    "RequestMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/7109b281fee6446fa7e3deffe9ae73f3760892abde1711447cb4739aca001739.vtl"
+    },
+    "ResponseMappingTemplate": "$util.toJson({})"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-miru-Nik-sandbox-a60578d1c9/data/amplifyData/CourseResource/MutationcreateCourseResourceauth0Function/MutationcreateCourseResourceauth0Function.AppSyncFunction"
+   }
+  },
+  "MutationcreateCourseResourcepostAuth0FunctionMutationcreateCourseResourcepostAuth0FunctionAppSyncFunctionF6EA5CDE": {
+   "Type": "AWS::AppSync::FunctionConfiguration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPI39909BBAApiId"
+    },
+    "DataSourceName": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPINONEDSB2CCC063Name"
+    },
+    "FunctionVersion": "2018-05-29",
+    "Name": "MutationcreateCourseResourcepostAuth0Function",
+    "RequestMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/c1721bcd774e27c514d3454b5be4f9bdd094c0161b57ddf053d618e3b0086a77.vtl"
+    },
+    "ResponseMappingTemplate": "$util.toJson({})"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-miru-Nik-sandbox-a60578d1c9/data/amplifyData/CourseResource/MutationcreateCourseResourcepostAuth0Function/MutationcreateCourseResourcepostAuth0Function.AppSyncFunction"
+   }
+  },
+  "MutationCreateCourseResourceDataResolverFnMutationCreateCourseResourceDataResolverFnAppSyncFunction089B33A2": {
+   "Type": "AWS::AppSync::FunctionConfiguration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPI39909BBAApiId"
+    },
+    "DataSourceName": {
+     "Fn::GetAtt": [
+      "CourseResourceDataSource",
+      "Name"
+     ]
+    },
+    "FunctionVersion": "2018-05-29",
+    "Name": "MutationCreateCourseResourceDataResolverFn",
+    "RequestMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/f03bafb49183b134b2f92c8e57c7da853f9a36cb9f24e64fa1d734e624a233fe.vtl"
+    },
+    "ResponseMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/f4a52b72209a9dfa197b5e7367a5c378c5bb86de6e29ddd9e48b49a3fe54b249.vtl"
+    }
+   },
+   "DependsOn": [
+    "CourseResourceDataSource"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-miru-Nik-sandbox-a60578d1c9/data/amplifyData/CourseResource/MutationCreateCourseResourceDataResolverFn/MutationCreateCourseResourceDataResolverFn.AppSyncFunction"
+   }
+  },
+  "CreateCourseResourceResolver": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPI39909BBAApiId"
+    },
+    "FieldName": "createCourseResource",
+    "Kind": "PIPELINE",
+    "PipelineConfig": {
+     "Functions": [
+      {
+       "Fn::GetAtt": [
+        "MutationcreateCourseResourceinit0FunctionMutationcreateCourseResourceinit0FunctionAppSyncFunctionEBAB5D2C",
+        "FunctionId"
+       ]
+      },
+      {
+       "Fn::GetAtt": [
+        "MutationcreateCourseResourcepreAuth0FunctionMutationcreateCourseResourcepreAuth0FunctionAppSyncFunctionB33A8287",
+        "FunctionId"
+       ]
+      },
+      {
+       "Fn::GetAtt": [
+        "MutationcreateCourseResourceauth0FunctionMutationcreateCourseResourceauth0FunctionAppSyncFunction7F3EE58B",
+        "FunctionId"
+       ]
+      },
+      {
+       "Fn::GetAtt": [
+        "MutationcreateCourseResourcepostAuth0FunctionMutationcreateCourseResourcepostAuth0FunctionAppSyncFunctionF6EA5CDE",
+        "FunctionId"
+       ]
+      },
+      {
+       "Fn::GetAtt": [
+        "MutationCreateCourseResourceDataResolverFnMutationCreateCourseResourceDataResolverFnAppSyncFunction089B33A2",
+        "FunctionId"
+       ]
+      }
+     ]
+    },
+    "RequestMappingTemplate": {
+     "Fn::Join": [
+      "",
+      [
+       "$util.qr($ctx.stash.put(\"typeName\", \"Mutation\"))\n$util.qr($ctx.stash.put(\"fieldName\", \"createCourseResource\"))\n$util.qr($ctx.stash.put(\"conditions\", []))\n$util.qr($ctx.stash.put(\"metadata\", {}))\n$util.qr($ctx.stash.metadata.put(\"dataSourceType\", \"AMAZON_DYNAMODB\"))\n$util.qr($ctx.stash.metadata.put(\"apiId\", \"",
+       {
+        "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPI39909BBAApiId"
+       },
+       "\"))\n$util.qr($ctx.stash.put(\"connectionAttributes\", {}))\n$util.qr($ctx.stash.put(\"tableName\", \"",
+       {
+        "Fn::Select": [
+         1,
+         {
+          "Fn::Split": [
+           "/",
+           {
+            "Fn::Select": [
+             5,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Fn::GetAtt": [
+                 "CourseResourceTable",
+                 "TableArn"
+                ]
+               }
+              ]
+             }
+            ]
+           }
+          ]
+         }
+        ]
+       },
+       "\"))\n$util.qr($ctx.stash.put(\"authRole\", \"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":sts::",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":assumed-role/",
+       {
+        "Ref": "referencetoamplifymiruNiksandboxa60578d1c9authNestedStackauthNestedStackResourceB7EBACB3OutputsamplifymiruNiksandboxa60578d1c9authamplifyAuthauthenticatedUserRole2F03F36DRef"
+       },
+       "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"unauthRole\", \"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":sts::",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":assumed-role/",
+       {
+        "Ref": "referencetoamplifymiruNiksandboxa60578d1c9authNestedStackauthNestedStackResourceB7EBACB3OutputsamplifymiruNiksandboxa60578d1c9authamplifyAuthunauthenticatedUserRole0DF3EC29Ref"
+       },
+       "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"identityPoolId\", \"",
+       {
+        "Ref": "referencetoamplifymiruNiksandboxa60578d1c9authNestedStackauthNestedStackResourceB7EBACB3OutputsamplifymiruNiksandboxa60578d1c9authamplifyAuthIdentityPool40FF0EB3Ref"
+       },
+       "\"))\n$util.qr($ctx.stash.put(\"adminRoles\", []))\n$util.toJson({})"
+      ]
+     ]
+    },
+    "ResponseMappingTemplate": "$util.toJson($ctx.prev.result)",
+    "TypeName": "Mutation"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-miru-Nik-sandbox-a60578d1c9/data/amplifyData/CourseResource/mutationCreateCourseResourceResolver"
+   }
+  },
+  "MutationupdateCourseResourceinit0FunctionMutationupdateCourseResourceinit0FunctionAppSyncFunction7A8EB801": {
+   "Type": "AWS::AppSync::FunctionConfiguration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPI39909BBAApiId"
+    },
+    "DataSourceName": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPINONEDSB2CCC063Name"
+    },
+    "FunctionVersion": "2018-05-29",
+    "Name": "MutationupdateCourseResourceinit0Function",
+    "RequestMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/06db846fd14e6fc371f22b12b5545ba8e2dbfeda85d8c8d586c71c282166657b.vtl"
+    },
+    "ResponseMappingTemplate": "$util.toJson({})"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-miru-Nik-sandbox-a60578d1c9/data/amplifyData/CourseResource/MutationupdateCourseResourceinit0Function/MutationupdateCourseResourceinit0Function.AppSyncFunction"
+   }
+  },
+  "MutationupdateCourseResourcepreAuth0FunctionMutationupdateCourseResourcepreAuth0FunctionAppSyncFunctionF03EAFEE": {
+   "Type": "AWS::AppSync::FunctionConfiguration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPI39909BBAApiId"
+    },
+    "DataSourceName": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPINONEDSB2CCC063Name"
+    },
+    "FunctionVersion": "2018-05-29",
+    "Name": "MutationupdateCourseResourcepreAuth0Function",
+    "RequestMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/39fb35c6f8e8573ffe3a63ba867cf543b05af129a104b387a44f03c3d85da0c3.vtl"
+    },
+    "ResponseMappingTemplate": "$util.toJson({})"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-miru-Nik-sandbox-a60578d1c9/data/amplifyData/CourseResource/MutationupdateCourseResourcepreAuth0Function/MutationupdateCourseResourcepreAuth0Function.AppSyncFunction"
+   }
+  },
+  "MutationupdateCourseResourceauth0FunctionMutationupdateCourseResourceauth0FunctionAppSyncFunctionA3B3FD5E": {
+   "Type": "AWS::AppSync::FunctionConfiguration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPI39909BBAApiId"
+    },
+    "DataSourceName": {
+     "Fn::GetAtt": [
+      "CourseResourceDataSource",
+      "Name"
+     ]
+    },
+    "FunctionVersion": "2018-05-29",
+    "Name": "MutationupdateCourseResourceauth0Function",
+    "RequestMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/1f5fed297da9c32ae3af922bf3a38ccf23b956078887d16891ec06c20c64722c.vtl"
+    },
+    "ResponseMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/441e89ad399c8abe4ee1a7910ef4c061fe17add52bcefe1771bbe5cab7c10825.vtl"
+    }
+   },
+   "DependsOn": [
+    "CourseResourceDataSource"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-miru-Nik-sandbox-a60578d1c9/data/amplifyData/CourseResource/MutationupdateCourseResourceauth0Function/MutationupdateCourseResourceauth0Function.AppSyncFunction"
+   }
+  },
+  "MutationupdateCourseResourcepostAuth0FunctionMutationupdateCourseResourcepostAuth0FunctionAppSyncFunctionC6E3D28E": {
+   "Type": "AWS::AppSync::FunctionConfiguration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPI39909BBAApiId"
+    },
+    "DataSourceName": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPINONEDSB2CCC063Name"
+    },
+    "FunctionVersion": "2018-05-29",
+    "Name": "MutationupdateCourseResourcepostAuth0Function",
+    "RequestMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/c1721bcd774e27c514d3454b5be4f9bdd094c0161b57ddf053d618e3b0086a77.vtl"
+    },
+    "ResponseMappingTemplate": "$util.toJson({})"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-miru-Nik-sandbox-a60578d1c9/data/amplifyData/CourseResource/MutationupdateCourseResourcepostAuth0Function/MutationupdateCourseResourcepostAuth0Function.AppSyncFunction"
+   }
+  },
+  "MutationUpdateCourseResourceDataResolverFnMutationUpdateCourseResourceDataResolverFnAppSyncFunction2FB17FFB": {
+   "Type": "AWS::AppSync::FunctionConfiguration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPI39909BBAApiId"
+    },
+    "DataSourceName": {
+     "Fn::GetAtt": [
+      "CourseResourceDataSource",
+      "Name"
+     ]
+    },
+    "FunctionVersion": "2018-05-29",
+    "Name": "MutationUpdateCourseResourceDataResolverFn",
+    "RequestMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/474bf0776ec2164a13191d1a0a9e057154931e4918fea5086f49850d02a5371b.vtl"
+    },
+    "ResponseMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/f4a52b72209a9dfa197b5e7367a5c378c5bb86de6e29ddd9e48b49a3fe54b249.vtl"
+    }
+   },
+   "DependsOn": [
+    "CourseResourceDataSource"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-miru-Nik-sandbox-a60578d1c9/data/amplifyData/CourseResource/MutationUpdateCourseResourceDataResolverFn/MutationUpdateCourseResourceDataResolverFn.AppSyncFunction"
+   }
+  },
+  "UpdateCourseResourceResolver": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPI39909BBAApiId"
+    },
+    "FieldName": "updateCourseResource",
+    "Kind": "PIPELINE",
+    "PipelineConfig": {
+     "Functions": [
+      {
+       "Fn::GetAtt": [
+        "MutationupdateCourseResourceinit0FunctionMutationupdateCourseResourceinit0FunctionAppSyncFunction7A8EB801",
+        "FunctionId"
+       ]
+      },
+      {
+       "Fn::GetAtt": [
+        "MutationupdateCourseResourcepreAuth0FunctionMutationupdateCourseResourcepreAuth0FunctionAppSyncFunctionF03EAFEE",
+        "FunctionId"
+       ]
+      },
+      {
+       "Fn::GetAtt": [
+        "MutationupdateCourseResourceauth0FunctionMutationupdateCourseResourceauth0FunctionAppSyncFunctionA3B3FD5E",
+        "FunctionId"
+       ]
+      },
+      {
+       "Fn::GetAtt": [
+        "MutationupdateCourseResourcepostAuth0FunctionMutationupdateCourseResourcepostAuth0FunctionAppSyncFunctionC6E3D28E",
+        "FunctionId"
+       ]
+      },
+      {
+       "Fn::GetAtt": [
+        "MutationUpdateCourseResourceDataResolverFnMutationUpdateCourseResourceDataResolverFnAppSyncFunction2FB17FFB",
+        "FunctionId"
+       ]
+      }
+     ]
+    },
+    "RequestMappingTemplate": {
+     "Fn::Join": [
+      "",
+      [
+       "$util.qr($ctx.stash.put(\"typeName\", \"Mutation\"))\n$util.qr($ctx.stash.put(\"fieldName\", \"updateCourseResource\"))\n$util.qr($ctx.stash.put(\"conditions\", []))\n$util.qr($ctx.stash.put(\"metadata\", {}))\n$util.qr($ctx.stash.metadata.put(\"dataSourceType\", \"AMAZON_DYNAMODB\"))\n$util.qr($ctx.stash.metadata.put(\"apiId\", \"",
+       {
+        "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPI39909BBAApiId"
+       },
+       "\"))\n$util.qr($ctx.stash.put(\"connectionAttributes\", {}))\n$util.qr($ctx.stash.put(\"tableName\", \"",
+       {
+        "Fn::Select": [
+         1,
+         {
+          "Fn::Split": [
+           "/",
+           {
+            "Fn::Select": [
+             5,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Fn::GetAtt": [
+                 "CourseResourceTable",
+                 "TableArn"
+                ]
+               }
+              ]
+             }
+            ]
+           }
+          ]
+         }
+        ]
+       },
+       "\"))\n$util.qr($ctx.stash.put(\"authRole\", \"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":sts::",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":assumed-role/",
+       {
+        "Ref": "referencetoamplifymiruNiksandboxa60578d1c9authNestedStackauthNestedStackResourceB7EBACB3OutputsamplifymiruNiksandboxa60578d1c9authamplifyAuthauthenticatedUserRole2F03F36DRef"
+       },
+       "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"unauthRole\", \"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":sts::",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":assumed-role/",
+       {
+        "Ref": "referencetoamplifymiruNiksandboxa60578d1c9authNestedStackauthNestedStackResourceB7EBACB3OutputsamplifymiruNiksandboxa60578d1c9authamplifyAuthunauthenticatedUserRole0DF3EC29Ref"
+       },
+       "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"identityPoolId\", \"",
+       {
+        "Ref": "referencetoamplifymiruNiksandboxa60578d1c9authNestedStackauthNestedStackResourceB7EBACB3OutputsamplifymiruNiksandboxa60578d1c9authamplifyAuthIdentityPool40FF0EB3Ref"
+       },
+       "\"))\n$util.qr($ctx.stash.put(\"adminRoles\", []))\n$util.toJson({})"
+      ]
+     ]
+    },
+    "ResponseMappingTemplate": "$util.toJson($ctx.prev.result)",
+    "TypeName": "Mutation"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-miru-Nik-sandbox-a60578d1c9/data/amplifyData/CourseResource/mutationUpdateCourseResourceResolver"
+   }
+  },
+  "MutationdeleteCourseResourcepreAuth0FunctionMutationdeleteCourseResourcepreAuth0FunctionAppSyncFunction83F29DC1": {
+   "Type": "AWS::AppSync::FunctionConfiguration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPI39909BBAApiId"
+    },
+    "DataSourceName": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPINONEDSB2CCC063Name"
+    },
+    "FunctionVersion": "2018-05-29",
+    "Name": "MutationdeleteCourseResourcepreAuth0Function",
+    "RequestMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/a2c0f8a4d76f659d130c8a445801845ae9d33e5cc2c5ecd610edc272d4bd46e3.vtl"
+    },
+    "ResponseMappingTemplate": "$util.toJson({})"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-miru-Nik-sandbox-a60578d1c9/data/amplifyData/CourseResource/MutationdeleteCourseResourcepreAuth0Function/MutationdeleteCourseResourcepreAuth0Function.AppSyncFunction"
+   }
+  },
+  "MutationdeleteCourseResourceauth0FunctionMutationdeleteCourseResourceauth0FunctionAppSyncFunction8D159F6D": {
+   "Type": "AWS::AppSync::FunctionConfiguration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPI39909BBAApiId"
+    },
+    "DataSourceName": {
+     "Fn::GetAtt": [
+      "CourseResourceDataSource",
+      "Name"
+     ]
+    },
+    "FunctionVersion": "2018-05-29",
+    "Name": "MutationdeleteCourseResourceauth0Function",
+    "RequestMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/1f5fed297da9c32ae3af922bf3a38ccf23b956078887d16891ec06c20c64722c.vtl"
+    },
+    "ResponseMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/316eed7f12121eae7c72cf5358052ece6be9883408ce41532984c614dacbddc7.vtl"
+    }
+   },
+   "DependsOn": [
+    "CourseResourceDataSource"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-miru-Nik-sandbox-a60578d1c9/data/amplifyData/CourseResource/MutationdeleteCourseResourceauth0Function/MutationdeleteCourseResourceauth0Function.AppSyncFunction"
+   }
+  },
+  "MutationdeleteCourseResourcepostAuth0FunctionMutationdeleteCourseResourcepostAuth0FunctionAppSyncFunction380DE568": {
+   "Type": "AWS::AppSync::FunctionConfiguration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPI39909BBAApiId"
+    },
+    "DataSourceName": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPINONEDSB2CCC063Name"
+    },
+    "FunctionVersion": "2018-05-29",
+    "Name": "MutationdeleteCourseResourcepostAuth0Function",
+    "RequestMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/c1721bcd774e27c514d3454b5be4f9bdd094c0161b57ddf053d618e3b0086a77.vtl"
+    },
+    "ResponseMappingTemplate": "$util.toJson({})"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-miru-Nik-sandbox-a60578d1c9/data/amplifyData/CourseResource/MutationdeleteCourseResourcepostAuth0Function/MutationdeleteCourseResourcepostAuth0Function.AppSyncFunction"
+   }
+  },
+  "MutationDeleteCourseResourceDataResolverFnMutationDeleteCourseResourceDataResolverFnAppSyncFunction7D4391FC": {
+   "Type": "AWS::AppSync::FunctionConfiguration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPI39909BBAApiId"
+    },
+    "DataSourceName": {
+     "Fn::GetAtt": [
+      "CourseResourceDataSource",
+      "Name"
+     ]
+    },
+    "FunctionVersion": "2018-05-29",
+    "Name": "MutationDeleteCourseResourceDataResolverFn",
+    "RequestMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/4f7907d1209a2c9953a0c053df402c634e359546d70c7cc5c2e8e21ea734880f.vtl"
+    },
+    "ResponseMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/f4a52b72209a9dfa197b5e7367a5c378c5bb86de6e29ddd9e48b49a3fe54b249.vtl"
+    }
+   },
+   "DependsOn": [
+    "CourseResourceDataSource"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-miru-Nik-sandbox-a60578d1c9/data/amplifyData/CourseResource/MutationDeleteCourseResourceDataResolverFn/MutationDeleteCourseResourceDataResolverFn.AppSyncFunction"
+   }
+  },
+  "DeleteCourseResourceResolver": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPI39909BBAApiId"
+    },
+    "FieldName": "deleteCourseResource",
+    "Kind": "PIPELINE",
+    "PipelineConfig": {
+     "Functions": [
+      {
+       "Fn::GetAtt": [
+        "MutationdeleteCourseResourcepreAuth0FunctionMutationdeleteCourseResourcepreAuth0FunctionAppSyncFunction83F29DC1",
+        "FunctionId"
+       ]
+      },
+      {
+       "Fn::GetAtt": [
+        "MutationdeleteCourseResourceauth0FunctionMutationdeleteCourseResourceauth0FunctionAppSyncFunction8D159F6D",
+        "FunctionId"
+       ]
+      },
+      {
+       "Fn::GetAtt": [
+        "MutationdeleteCourseResourcepostAuth0FunctionMutationdeleteCourseResourcepostAuth0FunctionAppSyncFunction380DE568",
+        "FunctionId"
+       ]
+      },
+      {
+       "Fn::GetAtt": [
+        "MutationDeleteCourseResourceDataResolverFnMutationDeleteCourseResourceDataResolverFnAppSyncFunction7D4391FC",
+        "FunctionId"
+       ]
+      }
+     ]
+    },
+    "RequestMappingTemplate": {
+     "Fn::Join": [
+      "",
+      [
+       "$util.qr($ctx.stash.put(\"typeName\", \"Mutation\"))\n$util.qr($ctx.stash.put(\"fieldName\", \"deleteCourseResource\"))\n$util.qr($ctx.stash.put(\"conditions\", []))\n$util.qr($ctx.stash.put(\"metadata\", {}))\n$util.qr($ctx.stash.metadata.put(\"dataSourceType\", \"AMAZON_DYNAMODB\"))\n$util.qr($ctx.stash.metadata.put(\"apiId\", \"",
+       {
+        "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPI39909BBAApiId"
+       },
+       "\"))\n$util.qr($ctx.stash.put(\"connectionAttributes\", {}))\n$util.qr($ctx.stash.put(\"tableName\", \"",
+       {
+        "Fn::Select": [
+         1,
+         {
+          "Fn::Split": [
+           "/",
+           {
+            "Fn::Select": [
+             5,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Fn::GetAtt": [
+                 "CourseResourceTable",
+                 "TableArn"
+                ]
+               }
+              ]
+             }
+            ]
+           }
+          ]
+         }
+        ]
+       },
+       "\"))\n$util.qr($ctx.stash.put(\"authRole\", \"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":sts::",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":assumed-role/",
+       {
+        "Ref": "referencetoamplifymiruNiksandboxa60578d1c9authNestedStackauthNestedStackResourceB7EBACB3OutputsamplifymiruNiksandboxa60578d1c9authamplifyAuthauthenticatedUserRole2F03F36DRef"
+       },
+       "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"unauthRole\", \"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":sts::",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":assumed-role/",
+       {
+        "Ref": "referencetoamplifymiruNiksandboxa60578d1c9authNestedStackauthNestedStackResourceB7EBACB3OutputsamplifymiruNiksandboxa60578d1c9authamplifyAuthunauthenticatedUserRole0DF3EC29Ref"
+       },
+       "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"identityPoolId\", \"",
+       {
+        "Ref": "referencetoamplifymiruNiksandboxa60578d1c9authNestedStackauthNestedStackResourceB7EBACB3OutputsamplifymiruNiksandboxa60578d1c9authamplifyAuthIdentityPool40FF0EB3Ref"
+       },
+       "\"))\n$util.qr($ctx.stash.put(\"adminRoles\", []))\n$util.toJson({})"
+      ]
+     ]
+    },
+    "ResponseMappingTemplate": "$util.toJson($ctx.prev.result)",
+    "TypeName": "Mutation"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-miru-Nik-sandbox-a60578d1c9/data/amplifyData/CourseResource/mutationDeleteCourseResourceResolver"
+   }
+  },
+  "SubscriptiononCreateCourseResourceauth0FunctionSubscriptiononCreateCourseResourceauth0FunctionAppSyncFunctionAC1DB459": {
+   "Type": "AWS::AppSync::FunctionConfiguration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPI39909BBAApiId"
+    },
+    "DataSourceName": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPINONEDSB2CCC063Name"
+    },
+    "FunctionVersion": "2018-05-29",
+    "Name": "SubscriptiononCreateCourseResourceauth0Function",
+    "RequestMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/28c03cd0bd0b3efdc443392a1f49ad56a4c7b189928dd9c3eaa1a6cc998167cd.vtl"
+    },
+    "ResponseMappingTemplate": "$util.toJson({})"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-miru-Nik-sandbox-a60578d1c9/data/amplifyData/CourseResource/SubscriptiononCreateCourseResourceauth0Function/SubscriptiononCreateCourseResourceauth0Function.AppSyncFunction"
+   }
+  },
+  "SubscriptiononCreateCourseResourcepostAuth0FunctionSubscriptiononCreateCourseResourcepostAuth0FunctionAppSyncFunctionA9A2F955": {
+   "Type": "AWS::AppSync::FunctionConfiguration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPI39909BBAApiId"
+    },
+    "DataSourceName": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPINONEDSB2CCC063Name"
+    },
+    "FunctionVersion": "2018-05-29",
+    "Name": "SubscriptiononCreateCourseResourcepostAuth0Function",
+    "RequestMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/c1721bcd774e27c514d3454b5be4f9bdd094c0161b57ddf053d618e3b0086a77.vtl"
+    },
+    "ResponseMappingTemplate": "$util.toJson({})"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-miru-Nik-sandbox-a60578d1c9/data/amplifyData/CourseResource/SubscriptiononCreateCourseResourcepostAuth0Function/SubscriptiononCreateCourseResourcepostAuth0Function.AppSyncFunction"
+   }
+  },
+  "SubscriptionOnCreateCourseResourceDataResolverFnSubscriptionOnCreateCourseResourceDataResolverFnAppSyncFunction6FA9386E": {
+   "Type": "AWS::AppSync::FunctionConfiguration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPI39909BBAApiId"
+    },
+    "DataSourceName": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPINONEDSB2CCC063Name"
+    },
+    "FunctionVersion": "2018-05-29",
+    "Name": "SubscriptionOnCreateCourseResourceDataResolverFn",
+    "RequestMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/fe3c43ada4b9d681a5e2312663ef7a73386424d73b73e51f8e2e9d4b50f7c502.vtl"
+    },
+    "ResponseMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/e0cff47fb007f0bbf2a4e43ca256d6aa7ec109821769fd79fa7c5e83f0e7f9fc.vtl"
+    }
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-miru-Nik-sandbox-a60578d1c9/data/amplifyData/CourseResource/SubscriptionOnCreateCourseResourceDataResolverFn/SubscriptionOnCreateCourseResourceDataResolverFn.AppSyncFunction"
+   }
+  },
+  "SubscriptiononCreateCourseResourceResolver": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPI39909BBAApiId"
+    },
+    "FieldName": "onCreateCourseResource",
+    "Kind": "PIPELINE",
+    "PipelineConfig": {
+     "Functions": [
+      {
+       "Fn::GetAtt": [
+        "SubscriptiononCreateCourseResourceauth0FunctionSubscriptiononCreateCourseResourceauth0FunctionAppSyncFunctionAC1DB459",
+        "FunctionId"
+       ]
+      },
+      {
+       "Fn::GetAtt": [
+        "SubscriptiononCreateCourseResourcepostAuth0FunctionSubscriptiononCreateCourseResourcepostAuth0FunctionAppSyncFunctionA9A2F955",
+        "FunctionId"
+       ]
+      },
+      {
+       "Fn::GetAtt": [
+        "SubscriptionOnCreateCourseResourceDataResolverFnSubscriptionOnCreateCourseResourceDataResolverFnAppSyncFunction6FA9386E",
+        "FunctionId"
+       ]
+      }
+     ]
+    },
+    "RequestMappingTemplate": {
+     "Fn::Join": [
+      "",
+      [
+       "$util.qr($ctx.stash.put(\"typeName\", \"Subscription\"))\n$util.qr($ctx.stash.put(\"fieldName\", \"onCreateCourseResource\"))\n$util.qr($ctx.stash.put(\"conditions\", []))\n$util.qr($ctx.stash.put(\"metadata\", {}))\n$util.qr($ctx.stash.metadata.put(\"dataSourceType\", \"NONE\"))\n$util.qr($ctx.stash.metadata.put(\"apiId\", \"",
+       {
+        "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPI39909BBAApiId"
+       },
+       "\"))\n$util.qr($ctx.stash.put(\"connectionAttributes\", {}))\n\n$util.qr($ctx.stash.put(\"authRole\", \"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":sts::",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":assumed-role/",
+       {
+        "Ref": "referencetoamplifymiruNiksandboxa60578d1c9authNestedStackauthNestedStackResourceB7EBACB3OutputsamplifymiruNiksandboxa60578d1c9authamplifyAuthauthenticatedUserRole2F03F36DRef"
+       },
+       "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"unauthRole\", \"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":sts::",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":assumed-role/",
+       {
+        "Ref": "referencetoamplifymiruNiksandboxa60578d1c9authNestedStackauthNestedStackResourceB7EBACB3OutputsamplifymiruNiksandboxa60578d1c9authamplifyAuthunauthenticatedUserRole0DF3EC29Ref"
+       },
+       "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"identityPoolId\", \"",
+       {
+        "Ref": "referencetoamplifymiruNiksandboxa60578d1c9authNestedStackauthNestedStackResourceB7EBACB3OutputsamplifymiruNiksandboxa60578d1c9authamplifyAuthIdentityPool40FF0EB3Ref"
+       },
+       "\"))\n$util.qr($ctx.stash.put(\"adminRoles\", []))\n$util.toJson({})"
+      ]
+     ]
+    },
+    "ResponseMappingTemplate": "$util.toJson($ctx.prev.result)",
+    "TypeName": "Subscription"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-miru-Nik-sandbox-a60578d1c9/data/amplifyData/CourseResource/subscriptionOnCreateCourseResourceResolver"
+   }
+  },
+  "SubscriptiononUpdateCourseResourceauth0FunctionSubscriptiononUpdateCourseResourceauth0FunctionAppSyncFunctionED3DDE01": {
+   "Type": "AWS::AppSync::FunctionConfiguration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPI39909BBAApiId"
+    },
+    "DataSourceName": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPINONEDSB2CCC063Name"
+    },
+    "FunctionVersion": "2018-05-29",
+    "Name": "SubscriptiononUpdateCourseResourceauth0Function",
+    "RequestMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/28c03cd0bd0b3efdc443392a1f49ad56a4c7b189928dd9c3eaa1a6cc998167cd.vtl"
+    },
+    "ResponseMappingTemplate": "$util.toJson({})"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-miru-Nik-sandbox-a60578d1c9/data/amplifyData/CourseResource/SubscriptiononUpdateCourseResourceauth0Function/SubscriptiononUpdateCourseResourceauth0Function.AppSyncFunction"
+   }
+  },
+  "SubscriptiononUpdateCourseResourcepostAuth0FunctionSubscriptiononUpdateCourseResourcepostAuth0FunctionAppSyncFunction54D823BC": {
+   "Type": "AWS::AppSync::FunctionConfiguration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPI39909BBAApiId"
+    },
+    "DataSourceName": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPINONEDSB2CCC063Name"
+    },
+    "FunctionVersion": "2018-05-29",
+    "Name": "SubscriptiononUpdateCourseResourcepostAuth0Function",
+    "RequestMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/c1721bcd774e27c514d3454b5be4f9bdd094c0161b57ddf053d618e3b0086a77.vtl"
+    },
+    "ResponseMappingTemplate": "$util.toJson({})"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-miru-Nik-sandbox-a60578d1c9/data/amplifyData/CourseResource/SubscriptiononUpdateCourseResourcepostAuth0Function/SubscriptiononUpdateCourseResourcepostAuth0Function.AppSyncFunction"
+   }
+  },
+  "SubscriptionOnUpdateCourseResourceDataResolverFnSubscriptionOnUpdateCourseResourceDataResolverFnAppSyncFunction144B4F42": {
+   "Type": "AWS::AppSync::FunctionConfiguration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPI39909BBAApiId"
+    },
+    "DataSourceName": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPINONEDSB2CCC063Name"
+    },
+    "FunctionVersion": "2018-05-29",
+    "Name": "SubscriptionOnUpdateCourseResourceDataResolverFn",
+    "RequestMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/fe3c43ada4b9d681a5e2312663ef7a73386424d73b73e51f8e2e9d4b50f7c502.vtl"
+    },
+    "ResponseMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/e0cff47fb007f0bbf2a4e43ca256d6aa7ec109821769fd79fa7c5e83f0e7f9fc.vtl"
+    }
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-miru-Nik-sandbox-a60578d1c9/data/amplifyData/CourseResource/SubscriptionOnUpdateCourseResourceDataResolverFn/SubscriptionOnUpdateCourseResourceDataResolverFn.AppSyncFunction"
+   }
+  },
+  "SubscriptiononUpdateCourseResourceResolver": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPI39909BBAApiId"
+    },
+    "FieldName": "onUpdateCourseResource",
+    "Kind": "PIPELINE",
+    "PipelineConfig": {
+     "Functions": [
+      {
+       "Fn::GetAtt": [
+        "SubscriptiononUpdateCourseResourceauth0FunctionSubscriptiononUpdateCourseResourceauth0FunctionAppSyncFunctionED3DDE01",
+        "FunctionId"
+       ]
+      },
+      {
+       "Fn::GetAtt": [
+        "SubscriptiononUpdateCourseResourcepostAuth0FunctionSubscriptiononUpdateCourseResourcepostAuth0FunctionAppSyncFunction54D823BC",
+        "FunctionId"
+       ]
+      },
+      {
+       "Fn::GetAtt": [
+        "SubscriptionOnUpdateCourseResourceDataResolverFnSubscriptionOnUpdateCourseResourceDataResolverFnAppSyncFunction144B4F42",
+        "FunctionId"
+       ]
+      }
+     ]
+    },
+    "RequestMappingTemplate": {
+     "Fn::Join": [
+      "",
+      [
+       "$util.qr($ctx.stash.put(\"typeName\", \"Subscription\"))\n$util.qr($ctx.stash.put(\"fieldName\", \"onUpdateCourseResource\"))\n$util.qr($ctx.stash.put(\"conditions\", []))\n$util.qr($ctx.stash.put(\"metadata\", {}))\n$util.qr($ctx.stash.metadata.put(\"dataSourceType\", \"NONE\"))\n$util.qr($ctx.stash.metadata.put(\"apiId\", \"",
+       {
+        "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPI39909BBAApiId"
+       },
+       "\"))\n$util.qr($ctx.stash.put(\"connectionAttributes\", {}))\n\n$util.qr($ctx.stash.put(\"authRole\", \"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":sts::",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":assumed-role/",
+       {
+        "Ref": "referencetoamplifymiruNiksandboxa60578d1c9authNestedStackauthNestedStackResourceB7EBACB3OutputsamplifymiruNiksandboxa60578d1c9authamplifyAuthauthenticatedUserRole2F03F36DRef"
+       },
+       "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"unauthRole\", \"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":sts::",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":assumed-role/",
+       {
+        "Ref": "referencetoamplifymiruNiksandboxa60578d1c9authNestedStackauthNestedStackResourceB7EBACB3OutputsamplifymiruNiksandboxa60578d1c9authamplifyAuthunauthenticatedUserRole0DF3EC29Ref"
+       },
+       "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"identityPoolId\", \"",
+       {
+        "Ref": "referencetoamplifymiruNiksandboxa60578d1c9authNestedStackauthNestedStackResourceB7EBACB3OutputsamplifymiruNiksandboxa60578d1c9authamplifyAuthIdentityPool40FF0EB3Ref"
+       },
+       "\"))\n$util.qr($ctx.stash.put(\"adminRoles\", []))\n$util.toJson({})"
+      ]
+     ]
+    },
+    "ResponseMappingTemplate": "$util.toJson($ctx.prev.result)",
+    "TypeName": "Subscription"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-miru-Nik-sandbox-a60578d1c9/data/amplifyData/CourseResource/subscriptionOnUpdateCourseResourceResolver"
+   }
+  },
+  "SubscriptiononDeleteCourseResourceauth0FunctionSubscriptiononDeleteCourseResourceauth0FunctionAppSyncFunction8FD8E32C": {
+   "Type": "AWS::AppSync::FunctionConfiguration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPI39909BBAApiId"
+    },
+    "DataSourceName": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPINONEDSB2CCC063Name"
+    },
+    "FunctionVersion": "2018-05-29",
+    "Name": "SubscriptiononDeleteCourseResourceauth0Function",
+    "RequestMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/28c03cd0bd0b3efdc443392a1f49ad56a4c7b189928dd9c3eaa1a6cc998167cd.vtl"
+    },
+    "ResponseMappingTemplate": "$util.toJson({})"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-miru-Nik-sandbox-a60578d1c9/data/amplifyData/CourseResource/SubscriptiononDeleteCourseResourceauth0Function/SubscriptiononDeleteCourseResourceauth0Function.AppSyncFunction"
+   }
+  },
+  "SubscriptiononDeleteCourseResourcepostAuth0FunctionSubscriptiononDeleteCourseResourcepostAuth0FunctionAppSyncFunction023AD32C": {
+   "Type": "AWS::AppSync::FunctionConfiguration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPI39909BBAApiId"
+    },
+    "DataSourceName": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPINONEDSB2CCC063Name"
+    },
+    "FunctionVersion": "2018-05-29",
+    "Name": "SubscriptiononDeleteCourseResourcepostAuth0Function",
+    "RequestMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/c1721bcd774e27c514d3454b5be4f9bdd094c0161b57ddf053d618e3b0086a77.vtl"
+    },
+    "ResponseMappingTemplate": "$util.toJson({})"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-miru-Nik-sandbox-a60578d1c9/data/amplifyData/CourseResource/SubscriptiononDeleteCourseResourcepostAuth0Function/SubscriptiononDeleteCourseResourcepostAuth0Function.AppSyncFunction"
+   }
+  },
+  "SubscriptionOnDeleteCourseResourceDataResolverFnSubscriptionOnDeleteCourseResourceDataResolverFnAppSyncFunctionB90B31C7": {
+   "Type": "AWS::AppSync::FunctionConfiguration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPI39909BBAApiId"
+    },
+    "DataSourceName": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPINONEDSB2CCC063Name"
+    },
+    "FunctionVersion": "2018-05-29",
+    "Name": "SubscriptionOnDeleteCourseResourceDataResolverFn",
+    "RequestMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/fe3c43ada4b9d681a5e2312663ef7a73386424d73b73e51f8e2e9d4b50f7c502.vtl"
+    },
+    "ResponseMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/e0cff47fb007f0bbf2a4e43ca256d6aa7ec109821769fd79fa7c5e83f0e7f9fc.vtl"
+    }
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-miru-Nik-sandbox-a60578d1c9/data/amplifyData/CourseResource/SubscriptionOnDeleteCourseResourceDataResolverFn/SubscriptionOnDeleteCourseResourceDataResolverFn.AppSyncFunction"
+   }
+  },
+  "SubscriptiononDeleteCourseResourceResolver": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPI39909BBAApiId"
+    },
+    "FieldName": "onDeleteCourseResource",
+    "Kind": "PIPELINE",
+    "PipelineConfig": {
+     "Functions": [
+      {
+       "Fn::GetAtt": [
+        "SubscriptiononDeleteCourseResourceauth0FunctionSubscriptiononDeleteCourseResourceauth0FunctionAppSyncFunction8FD8E32C",
+        "FunctionId"
+       ]
+      },
+      {
+       "Fn::GetAtt": [
+        "SubscriptiononDeleteCourseResourcepostAuth0FunctionSubscriptiononDeleteCourseResourcepostAuth0FunctionAppSyncFunction023AD32C",
+        "FunctionId"
+       ]
+      },
+      {
+       "Fn::GetAtt": [
+        "SubscriptionOnDeleteCourseResourceDataResolverFnSubscriptionOnDeleteCourseResourceDataResolverFnAppSyncFunctionB90B31C7",
+        "FunctionId"
+       ]
+      }
+     ]
+    },
+    "RequestMappingTemplate": {
+     "Fn::Join": [
+      "",
+      [
+       "$util.qr($ctx.stash.put(\"typeName\", \"Subscription\"))\n$util.qr($ctx.stash.put(\"fieldName\", \"onDeleteCourseResource\"))\n$util.qr($ctx.stash.put(\"conditions\", []))\n$util.qr($ctx.stash.put(\"metadata\", {}))\n$util.qr($ctx.stash.metadata.put(\"dataSourceType\", \"NONE\"))\n$util.qr($ctx.stash.metadata.put(\"apiId\", \"",
+       {
+        "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPI39909BBAApiId"
+       },
+       "\"))\n$util.qr($ctx.stash.put(\"connectionAttributes\", {}))\n\n$util.qr($ctx.stash.put(\"authRole\", \"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":sts::",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":assumed-role/",
+       {
+        "Ref": "referencetoamplifymiruNiksandboxa60578d1c9authNestedStackauthNestedStackResourceB7EBACB3OutputsamplifymiruNiksandboxa60578d1c9authamplifyAuthauthenticatedUserRole2F03F36DRef"
+       },
+       "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"unauthRole\", \"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":sts::",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":assumed-role/",
+       {
+        "Ref": "referencetoamplifymiruNiksandboxa60578d1c9authNestedStackauthNestedStackResourceB7EBACB3OutputsamplifymiruNiksandboxa60578d1c9authamplifyAuthunauthenticatedUserRole0DF3EC29Ref"
+       },
+       "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"identityPoolId\", \"",
+       {
+        "Ref": "referencetoamplifymiruNiksandboxa60578d1c9authNestedStackauthNestedStackResourceB7EBACB3OutputsamplifymiruNiksandboxa60578d1c9authamplifyAuthIdentityPool40FF0EB3Ref"
+       },
+       "\"))\n$util.qr($ctx.stash.put(\"adminRoles\", []))\n$util.toJson({})"
+      ]
+     ]
+    },
+    "ResponseMappingTemplate": "$util.toJson($ctx.prev.result)",
+    "TypeName": "Subscription"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-miru-Nik-sandbox-a60578d1c9/data/amplifyData/CourseResource/subscriptionOnDeleteCourseResourceResolver"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/1WOwW6DMAyGn6X31Otg0s4raMdtgt0rkxiUAg6KnVYV4t0n6NRpp9+f/Mn+M8heczjs8Cp76/r94BuYP0iUXK1oe1O0/IURR1KKKxSBnVcf2FQkIUVLpkiiYfzDlh8zXuU0uxvjGFwD39gMdEQh43GEuQrD3Q4DLQanSW5sYS43vWxKVKwfJ//Te2K7ligCt75LEbdGv5+HC8XFSH5CEVKBtzWM5HBMtiddCyyr+5l0Smq2da3Yee4Ww8ERnOXpkmXw/AKH3Vm838fE6keC6p4/ioYujzYBAAA="
+   },
+   "Metadata": {
+    "aws:cdk:path": "amplify-miru-Nik-sandbox-a60578d1c9/data/amplifyData/CourseResource/CDKMetadata/Default"
+   },
+   "Condition": "CDKMetadataAvailable"
+  }
+ },
+ "Outputs": {
+  "GetAttCourseResourceTableStreamArn": {
+   "Description": "Your DynamoDB table StreamArn.",
+   "Value": {
+    "Fn::GetAtt": [
+     "CourseResourceTable",
+     "TableStreamArn"
+    ]
+   },
+   "Export": {
+    "Name": {
+     "Fn::Join": [
+      ":",
+      [
+       {
+        "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPI39909BBAApiId"
+       },
+       "GetAtt:CourseResourceTable:StreamArn"
+      ]
+     ]
+    }
+   }
+  },
+  "GetAttCourseResourceTableName": {
+   "Description": "Your DynamoDB table name.",
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "CourseResource-",
+      {
+       "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPI39909BBAApiId"
+      },
+      "-NONE"
+     ]
+    ]
+   },
+   "Export": {
+    "Name": {
+     "Fn::Join": [
+      ":",
+      [
+       {
+        "Ref": "referencetoamplifymiruNiksandboxa60578d1c9dataamplifyDataGraphQLAPI39909BBAApiId"
+       },
+       "GetAtt:CourseResourceTable:Name"
+      ]
+     ]
+    }
+   }
+  },
+  "amplifymiruNiksandboxa60578d1c9dataamplifyDataCourseResourceCourseResourceDataSource8A7DF7E1Name": {
+   "Value": {
+    "Fn::GetAtt": [
+     "CourseResourceDataSource",
+     "Name"
+    ]
+   }
+  },
+  "amplifymiruNiksandboxa60578d1c9dataamplifyDataCourseResourceCourseResourceTableCE689791TableArn": {
+   "Value": {
+    "Fn::GetAtt": [
+     "CourseResourceTable",
+     "TableArn"
+    ]
+   }
+  }
+ }
+}

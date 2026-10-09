@@ -1,0 +1,44 @@
+{
+  "58291": {
+    "email": "58291@miru.edu",
+    "name": "Prof. Kenneth Mori",
+    "role": "TEACHER",
+    "idNumber": "58291",
+    "idLabel": "Employee ID"
+  },
+  "98765": {
+    "email": "98765@miru.edu",
+    "name": "Prof. Sarah Lee",
+    "role": "TEACHER",
+    "idNumber": "98765",
+    "idLabel": "Employee ID"
+  },
+  "24BRS1242": {
+    "email": "sagniksinghaishere@gmail.com",
+    "name": "Sagnik Singha",
+    "role": "STUDENT",
+    "idNumber": "24BRS1242",
+    "idLabel": "Register No."
+  },
+  "24brs1242": {
+    "email": "sagniksinghaishere@gmail.com",
+    "name": "Sagnik Singha",
+    "role": "STUDENT",
+    "idNumber": "24BRS1242",
+    "idLabel": "Register No."
+  },
+  "sagniksinghaishere@gmail.com": {
+    "email": "sagniksinghaishere@gmail.com",
+    "name": "Sagnik Singha",
+    "role": "STUDENT",
+    "idNumber": "24BRS1242",
+    "idLabel": "Register No."
+  },
+  "SAGNIKSINGHAISHERE@GMAIL.COM": {
+    "email": "sagniksinghaishere@gmail.com",
+    "name": "Sagnik Singha",
+    "role": "STUDENT",
+    "idNumber": "24BRS1242",
+    "idLabel": "Register No."
+  }
+}

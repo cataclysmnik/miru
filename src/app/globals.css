@@ -1,0 +1,147 @@
+@import "tailwindcss";
+
+@theme {
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+}
+
+@layer base {
+  :root {
+    --background: 45 42% 98%;
+    --foreground: 0 0% 24%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 24%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 24%;
+    --primary: 84 41% 49%; /* Matcha green */
+    --primary-foreground: 0 0% 98%;
+    --secondary: 34 43% 84%; /* Warm beige */
+    --secondary-foreground: 0 0% 24%;
+    --muted: 43 38% 95%;
+    --muted-foreground: 0 0% 46%;
+    --accent: 84 41% 49%; /* Matcha green */
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 34 43% 84%;
+    --input: 34 43% 84%;
+    --ring: 84 41% 49%;
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 60 6% 10%; /* Dark wabi-sabi */
+    --foreground: 47 18% 89%;
+    --card: 60 7% 11%;
+    --card-foreground: 47 18% 89%;
+    --popover: 60 7% 11%;
+    --popover-foreground: 47 18% 89%;
+    --primary: 84 41% 49%; /* Matcha green */
+    --primary-foreground: 0 0% 98%;
+    --secondary: 30 7% 16%; /* Dark beige */
+    --secondary-foreground: 47 18% 89%;
+    --muted: 45 6% 14%;
+    --muted-foreground: 49 6% 61%;
+    --accent: 84 41% 49%; /* Matcha green */
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 45 7% 21%;
+    --input: 45 7% 21%;
+    --ring: 84 41% 49%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.5s;
+}
+
+/* Amplify UI Theme Overrides */
+body [data-amplify-authenticator] {
+  --amplify-colors-background-primary: hsl(var(--card)) !important;
+  --amplify-colors-background-secondary: hsl(var(--background)) !important;
+  --amplify-colors-font-primary: hsl(var(--foreground)) !important;
+  --amplify-colors-font-secondary: hsl(var(--muted-foreground)) !important;
+  --amplify-colors-font-interactive: hsl(var(--foreground)) !important;
+  
+  --amplify-colors-border-primary: hsl(var(--border)) !important;
+  --amplify-colors-border-secondary: hsl(var(--border)) !important;
+  --amplify-colors-border-focus: hsl(var(--ring)) !important;
+  --amplify-colors-border-error: hsl(var(--destructive)) !important;
+  
+  --amplify-components-button-primary-background-color: hsl(var(--primary)) !important;
+  --amplify-components-button-primary-color: hsl(var(--primary-foreground)) !important;
+  --amplify-components-button-primary-hover-background-color: hsl(var(--primary)) !important;
+  --amplify-components-button-primary-hover-color: hsl(var(--primary-foreground)) !important;
+  
+  --amplify-components-button-link-color: hsl(var(--foreground)) !important;
+  --amplify-components-button-link-hover-color: hsl(var(--foreground)) !important;
+  
+  --amplify-components-tabs-item-active-color: hsl(var(--foreground)) !important;
+  --amplify-components-tabs-item-active-border-color: hsl(var(--primary)) !important;
+  --amplify-components-tabs-item-color: hsl(var(--muted-foreground)) !important;
+  --amplify-components-tabs-item-hover-color: hsl(var(--foreground)) !important;
+  
+  --amplify-components-fieldcontrol-border-color: hsl(var(--input)) !important;
+  --amplify-components-fieldcontrol-color: hsl(var(--foreground)) !important;
+  --amplify-components-fieldcontrol-focus-border-color: hsl(var(--ring)) !important;
+  --amplify-components-fieldcontrol-focus-box-shadow: 0 0 0 1px hsl(var(--ring)) !important;
+  
+  --amplify-radii-small: var(--radius-sm) !important;
+  --amplify-radii-medium: var(--radius-md) !important;
+  --amplify-radii-large: var(--radius-lg) !important;
+  --amplify-radii-xl: var(--radius-lg) !important;
+  --amplify-radii-xxl: var(--radius-lg) !important;
+  
+  --amplify-components-authenticator-router-box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1) !important;
+  --amplify-components-authenticator-router-border-width: 1px !important;
+  --amplify-components-authenticator-router-border-color: hsl(var(--border)) !important;
+  
+  font-family: inherit !important;
+}
+
+[data-amplify-authenticator] [data-amplify-router] {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid hsl(var(--border));
+  background-color: hsl(var(--card));
+}
